@@ -153,5 +153,19 @@
 	window.addEventListener('mousewheel', mousewheel, false);
 	document.addEventListener("keydown", onDocumentKeyDown, false);
 
-	setupSocket();
-//})();
+	//setupSocket();
+
+	var gui = new dat.GUI();
+	var control = {
+		lightColor: '#888888',
+		intensity: 0.5,
+		x: 0,
+		y: 0,
+		z: 0
+	};
+	gui.addColor(control, 'lightColor');
+	gui.add(control, 'intensity', 0, 5, 0.1);
+	gui.add(control, 'x', -150, 150);
+	gui.add(control, 'y', -150, 150);
+	gui.add(control, 'z', -150, 150);
+	
