@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>human tower prototype</title>
+	<meta charset="utf-8">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+	body 
+	{
+		margin: 0px;
+		overflow: hidden;
+	}
+	</style>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Libraries JS -->
+<script src="js/libs/three.min.js"></script>
+<script src="js/libs/stats.min.js"></script>
+<script src="js/libs/OrbitControls.js"></script>
+<script src="js/libs/tween.min.js"></script>
+<script src="js/libs/OBJLoader.js"></script>
+<script src="js/libs/socket.io.js"></script>
+
+
+<div id="demo" style="position: absolute; left:0px; top:0px"></div>
+
+<!-- Shaders -->
+<script id="vertexShader" type="x-shader/x-vertex">
+	varying vec2 vUv;
+	void main()
+	{
+		vUv = uv;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+
+	uniform sampler2D texture;
+	uniform vec3 color;
+
+	varying vec2 vUv;
+
+	void main()
+	{
+		vec3 tColor = texture2D( texture, vUv ).rgb;
+		float a = (length(tColor - color) - 0.5) * 7.0;
+		gl_FragColor = vec4(tColor, a);
+	}
+</script>
+<script id="spriteSheetShader" type="x-shader/x-fragment">
+
+	uniform sampler2D texture;
+	uniform vec3 color;
+	uniform float  tileNum;
+	uniform float  tileCount;
+	varying vec2 vUv;
+
+	void main()
+	{
+		vec2 t = vUv;
+		//tileNum/tileCount should work meanwhile we'll use this fix
+		if(tileCount>1.0){
+			t = vec2(tileNum/tileCount+vUv.x/tileCount,vUv.y);
+		}
+		
+		vec3 tColor = texture2D( texture, t ).rgb;
+		float a = (length(tColor - color) - 0.5) * 7.0;
+		gl_FragColor = vec4(tColor, a);
+	}
+</script>
+
+<script id="vs_clouds" type="x-shader/x-vertex">
+
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
+
+</script>
+
+<script id="fs_clouds" type="x-shader/x-fragment">
+
+    uniform sampler2D map;
+    uniform vec3 fogColor;
+    uniform float fogNear;
+    uniform float fogFar;
+    varying vec2 vUv;
+
+    void main() {
+
+        float depth = gl_FragCoord.z / gl_FragCoord.w;
+        float fogFactor = smoothstep( fogNear, fogFar, depth );
+        gl_FragColor = texture2D( map, vUv );
+        gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+        gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+
+    }
+
+</script>
+
+
+<!-- scripts JS -->
+<script src="js/settings.js"></script>
+<script src="js/imageLoader.js"></script>
+<script src="js/background.js"></script>
+<script src="js/spritesheetmaterial.js"></script>
+<script src="js/socketManager.js"></script>
+<script src="js/human.js"></script>
+<script src="js/main.js"></script>
+
+<!-- form to find outself-->
+
+    <div class="container">
+      <h2>Find you in the tower</h2>
+      <form role="form">
+        <div class="form-group">
+          <input type="email" class="form-control" id="email" placeholder="Enter id">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

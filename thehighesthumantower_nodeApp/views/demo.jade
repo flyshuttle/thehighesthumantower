@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  div
+    form(name="demo",action='/insert-new',method='post')
+      div
+        label(for='heighPerson') heighPerson: 
+          input(id='heighPerson',type='text',value='',name='heighPerson')
+      div
+        input(type='submit',value='Send')
+
+
