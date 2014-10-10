@@ -1,7 +1,7 @@
 //(function () {
 	var scene = new THREE.Scene();
 	var clock = new THREE.Clock();
-	var camera = new THREE.PerspectiveCamera(50,1,0.1,20000);
+	var camera = new THREE.PerspectiveCamera(50,1,0.1,200000);
 	var tower = new Tower();
 	var camAccel  = 0;
 	var maxAccel  = 20; //max speed allowed
@@ -12,7 +12,8 @@
 	var moving = false;
 	camera.position.set(0, 0, 400);
 	
-	renderer = new THREE.WebGLRenderer({ antialias: true });
+	//set logarithmicDepthBuffer = true to render the city 
+	renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: false });
 	renderer.setClearColor(0xffffff);
 	document.getElementById('demo').appendChild(renderer.domElement);
 
@@ -31,7 +32,7 @@
 	var obj = new THREE.Object3D();
 	obj.add(camera);
 	obj.add(tower);
-	obj.position.y=88.5;
+	obj.position.y=88.5; 
 	obj.scale.multiplyScalar(0.1);
 	scene.add(obj);
 	
@@ -39,12 +40,6 @@
 			tower.init(data);
 			tower.position.y=tower.height;
 		});
-	/*
-	for(var i=0; i<3000; i++){
-		var newHuman = new Human(i,1.0);
-		tower.push(newHuman);
-	}
-	*/
 	tower.position.y=tower.height;
 	
 	//lookAtPos.copy( humans[humanIndex].position);
