@@ -62,16 +62,39 @@
 	// background
 	var myBackground = new background();
 
+	// Visual GUI
+	var gui = new dat.GUI();
+	// object default values 
+	var control = {
+		directionalLightColor: '#ffffff',
+		directionalLightIntensity: 0.5,
+		ambientLightColor: '#000044',
+		towerX: 0,
+		towerY: 0,
+		towerZ: 0,
+		scaleTower: 0
+	};
+
+	gui.addColor(control, 'directionalLightColor');
+	gui.add(control, 'directionalLightIntensity', 0, 5, 0.1);
+	gui.addColor(control, 'ambientLightColor');
+
+	gui.add(control, 'towerX', -150, 150);
+	gui.add(control, 'towerY', -150, 150);
+	gui.add(control, 'towerZ', -150, 150);
+	gui.add(control, 'scaleTower', 0, 400);
+
 	// animate
 	var animate = function () {
 
 		// update values data.gui
-		myBackground.directionalLight.intensity = 0.5;
-		myBackground.directionalLight.color.setHex( 0x444444 );
-
-		myBackground.ambientLight.intensity = 0.5;
-		myBackground.ambientLight.color.setHex( 0x444444 );
 		
+		myBackground.directionalLight.intensity = control.directionalLightIntensity;
+
+		/*
+		myBackground.directionalLight.color.setHex( control.directionalLightColor );
+		myBackground.ambientLight.color.setHex( control.ambientLightColor );
+		*/
 
 		//controls.update();
 		var delta = clock.getDelta(); 
@@ -160,31 +183,7 @@
 	window.addEventListener('mousewheel', mousewheel, false);
 	document.addEventListener("keydown", onDocumentKeyDown, false);
 
-	setupSocket();
-
-	// Visual GUI
-	var gui = new dat.GUI();
-	// object default values 
-	var control = {
-		directionalLightColor: '#888888',
-		directionalLightIntensity: 0.5,
-		ambientLightColor: '#888888',
-		ambientLightIntensity: 0.5,
-		towerX: 0,
-		towerY: 0,
-		towerZ: 0,
-		scaleTower: 0
-	};
-
-	gui.addColor(control, 'directionalLightColor');
-	gui.add(control, 'directionalLightIntensity', 0, 5, 0.1);
-	gui.addColor(control, 'ambientLightColor');
-	gui.add(control, 'ambientLightIntensity', 0, 5, 0.1);
-
-	gui.add(control, 'towerX', -150, 150);
-	gui.add(control, 'towerY', -150, 150);
-	gui.add(control, 'towerZ', -150, 150);
-	gui.add(control, 'scaleTower', 0, 400);
+	//setupSocket();
 
 	// loading 
 	function loadingProgress(item,loaded, total){

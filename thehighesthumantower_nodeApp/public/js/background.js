@@ -47,9 +47,9 @@ function background(){
 	// Sea
 	this.sea = function (){
 		this.seaMaterial = new THREE.MeshLambertMaterial({color: 0x206ad9});
-		var sea = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 10, 10), this.seaMaterial );
-		sea.rotation.x = Math.PI / 2;
-		scene.add(sea);
+		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 10, 10), this.seaMaterial );
+		this.sea.rotation.x = Math.PI / 2;
+		scene.add(this.sea);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ function background(){
 	//this.floor();
 	this.barcelonaSkyline();
 	this.lights();
-	//this.sea();
+	this.sea();
 	//this.fog();
 	//this.clouds();
 	// ----------------------------------------------------------------------------------------------
