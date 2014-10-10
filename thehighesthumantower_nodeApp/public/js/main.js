@@ -1,7 +1,7 @@
 //(function () {
 	var scene = new THREE.Scene();
 	var clock = new THREE.Clock();
-	var camera = new THREE.PerspectiveCamera(50,1,0.1,20000);
+	var camera = new THREE.PerspectiveCamera(50,1,0.1,200000);
 	var humanIndex = 0; //current human 
 	
 	var lookAtPos =  new THREE.Vector3();
@@ -153,19 +153,42 @@
 	window.addEventListener('mousewheel', mousewheel, false);
 	document.addEventListener("keydown", onDocumentKeyDown, false);
 
-	//setupSocket();
+	setupSocket();
 
+	// Visual GUI
 	var gui = new dat.GUI();
 	var control = {
 		lightColor: '#888888',
 		intensity: 0.5,
 		x: 0,
 		y: 0,
-		z: 0
+		z: 0,
+		scaleTower: 0
 	};
 	gui.addColor(control, 'lightColor');
 	gui.add(control, 'intensity', 0, 5, 0.1);
 	gui.add(control, 'x', -150, 150);
 	gui.add(control, 'y', -150, 150);
 	gui.add(control, 'z', -150, 150);
+	gui.add(control, 'scaleTower', 0, 400);
+
+	// loading bar
+	var callbackProgress = function( progress, result ) {
+
+		var bar = 250,
+			total = progress.totalModels + progress.totalTextures,
+			loaded = progress.loadedModels + progress.loadedTextures;
+
+		if ( total )
+			bar = Math.floor( bar * loaded / total );
+
+		$( "bar" ).style.width = bar + "px";
+
+		count = 0;
+		for ( var m in result.materials ) count++;
+
+		handle_update( result, Math.floor( count/total ) );
+
+	}
+
 	

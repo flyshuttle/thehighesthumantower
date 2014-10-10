@@ -79,6 +79,9 @@ function background(){
 		var manager = new THREE.LoadingManager();
 		manager.onProgress = function ( item, loaded, total ) {
 			console.log( item, loaded, total );
+			if(loaded==total){
+				$('#splash').fadeOut();
+			}
 		};
 		var self = this;
 		var loader = new THREE.OBJLoader( manager );
@@ -93,7 +96,6 @@ function background(){
 
 		} );
 
-
 		// map transformation
 		var scaleFactor = 10.0;	
 		self.buildings.rotation.y = 0.76;
@@ -103,75 +105,34 @@ function background(){
 
 
 	this.barcelonaSkylineFull = function (){
-	/*
-		var objectPath = ['obj/all/1_parte_barcelona.obj',
-						  'obj/all/2_parte_barcelona.obj',
-						  'obj/all/3_parte_barcelona.obj'
-						];
+		var objectPath = "all_barcelona.obj";
 		var loaderId = 0;
 		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.buildings = new THREE.Object3D();
 		var manager = new THREE.LoadingManager();
 		manager.onProgress = function ( item, loaded, total ) {
 			console.log( item, loaded, total );
+			// when is finish
+			if(loaded==total){
+				$('#splash').fadeOut();
+			}
 		};
 		var self = this;
 
-		var loadModel = function(callback){
-			var loader = new THREE.OBJLoader( manager );
-			loader.load( objectPath[loaderId++], function ( object ) {
-				object.traverse( function ( child ) {
-					if ( child instanceof THREE.Mesh ) {
-						child.material = self.buildingMaterial;
-					}
-					self.buildings.add( object );
-					callback();
-				});
-			});
-		};
-		
-		// load one model after the other is load
-		loadModel(function(){
-			loadModel(function(){
-				loadModel(function(){
-				});
+		var loader = new THREE.OBJLoader( manager );
+		loader.load( objectPath, function ( object ) {
+			object.traverse( function ( child ) {
+				if ( child instanceof THREE.Mesh ) {
+					child.material = self.buildingMaterial;
+				}
+				self.buildings.add( object );
 			});
 		});
-
 		// map transformation
 		var scaleFactor = 10.0;	
-		this.buildings.rotation.y = 0.76;
-		this.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
-		scene.add(this.buildings);
-		*/
-		var objectPath = ['obj/all/1_parte_barcelona.obj',
-						  'obj/all/2_parte_barcelona.obj',
-						  'obj/all/3_parte_barcelona.obj'
-						];
-		var loaderId = 0;
-		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
-		this.buildings = new THREE.Object3D();
-		var manager = new THREE.LoadingManager();
-		manager.onProgress = function ( item, loaded, total ) {
-			console.log( item, loaded, total );
-		};
-		var self = this;
-
-		
-			var loader = new THREE.OBJLoader( manager );
-			loader.load( objectPath[loaderId++], function ( object ) {
-				object.traverse( function ( child ) {
-					if ( child instanceof THREE.Mesh ) {
-						child.material = self.buildingMaterial;
-					}
-					self.buildings.add( object );
-					// map transformation
-					var scaleFactor = 10.0;	
-					self.buildings.rotation.y = 0.76;
-					self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
-					scene.add(self.buildings);
-				});
-			});
+		self.buildings.rotation.y = 0.76;
+		self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
+		scene.add(self.buildings);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -190,7 +151,7 @@ function background(){
 	// ----------------------------------------------------------------------------------------------
 	// Fog
 	this.fog = function (){
-		scene.fog = new THREE.Fog( 0xffffff, 1, 10000 );
+		scene.fog = new THREE.Fog( 0xffffff, 1, 50000 );
 		scene.fog.color.setHSL( 0.6, 0, 1 );
 	}
 
@@ -235,11 +196,11 @@ function background(){
 	// Setup
 	// ----------------------------------------------------------------------------------------------
 	//this.skyDomeImages();
-	this.floor();
+	//this.floor();
 	this.barcelonaSkyline();
 	this.lights();
 	//this.sea();
-	this.fog();
+	//this.fog();
 	//this.clouds();
 	// ----------------------------------------------------------------------------------------------
 }

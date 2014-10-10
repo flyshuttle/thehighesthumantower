@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>human tower prototype</title>
+	<title>The highest human tower</title>
 	<meta charset="utf-8">
 	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -12,10 +12,29 @@
 		overflow: hidden;
 	}
 	</style>
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Signika">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/general.css">
+
 </head>
 <body>
+
+<!-- HTML from body -->
+<div id="splash" style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 10;">
+    <!--Put splash here-->
+    <div id="title">The highest human tower</div>
+    <div class="loading"></div>
+</div>
+
+<div id="progress">
+	<span id="message">Loading ...</span>
+	<center>
+		<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
+		<div id="start" class="disabled">Start</div>
+	</center>
+</div>
+
+<div id="demo" style="position: absolute; left:0px; top:0px"></div>
 
 <!-- Libraries JS -->
 <script type='text/javascript' src="js/libs/three.min.js"></script>
@@ -27,8 +46,6 @@
 <script type='text/javascript' src='js/libs/DAT.GUI.min.js'></script>
 <script type='text/javascript' src="js/libs/jquery-1.11.0.min.js"></script>
 <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
-
-<div id="demo" style="position: absolute; left:0px; top:0px"></div>
 
 <!-- Shaders -->
 <script id="vertexShader" type="x-shader/x-vertex">
