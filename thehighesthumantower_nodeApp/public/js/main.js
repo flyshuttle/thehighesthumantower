@@ -31,7 +31,6 @@
 
 	var humans = [];
 
-	
 	for(var i=0; i<100; i++){
 		var newHuman = new Human();
 		newHuman.position.y=105*i;
@@ -60,8 +59,20 @@
 	window.addEventListener('resize', resize, false);
 	resize();
 
+	// background
+	var myBackground = new background();
+
 	// animate
 	var animate = function () {
+
+		// update values data.gui
+		myBackground.directionalLight.intensity = 0.5;
+		myBackground.directionalLight.color.setHex( 0x444444 );
+
+		myBackground.ambientLight.intensity = 0.5;
+		myBackground.ambientLight.color.setHex( 0x444444 );
+		
+
 		//controls.update();
 		var delta = clock.getDelta(); 
 		for (var i in humans){
@@ -76,12 +87,9 @@
 		stats.update();
 		requestAnimationFrame(animate);
 	}
-	
+
 	animate();
 
-	// background
-	var myBackground = new background();
-	
 	var onDocumentKeyDown = function(event){
 		
 		var offset = 0 ;
@@ -156,19 +164,26 @@
 
 	// Visual GUI
 	var gui = new dat.GUI();
+	// object default values 
 	var control = {
-		lightColor: '#888888',
-		intensity: 0.5,
-		x: 0,
-		y: 0,
-		z: 0,
+		directionalLightColor: '#888888',
+		directionalLightIntensity: 0.5,
+		ambientLightColor: '#888888',
+		ambientLightIntensity: 0.5,
+		towerX: 0,
+		towerY: 0,
+		towerZ: 0,
 		scaleTower: 0
 	};
-	gui.addColor(control, 'lightColor');
-	gui.add(control, 'intensity', 0, 5, 0.1);
-	gui.add(control, 'x', -150, 150);
-	gui.add(control, 'y', -150, 150);
-	gui.add(control, 'z', -150, 150);
+
+	gui.addColor(control, 'directionalLightColor');
+	gui.add(control, 'directionalLightIntensity', 0, 5, 0.1);
+	gui.addColor(control, 'ambientLightColor');
+	gui.add(control, 'ambientLightIntensity', 0, 5, 0.1);
+
+	gui.add(control, 'towerX', -150, 150);
+	gui.add(control, 'towerY', -150, 150);
+	gui.add(control, 'towerZ', -150, 150);
 	gui.add(control, 'scaleTower', 0, 400);
 
 	// loading 

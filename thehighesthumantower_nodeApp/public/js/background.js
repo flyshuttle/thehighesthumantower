@@ -135,13 +135,13 @@ function background(){
 	// Lights
 	this.lights = function (){
 		// Ambient Light
-		var ambientLight = new THREE.AmbientLight(0x000044);
-      	scene.add(ambientLight);
+		this.ambientLight = new THREE.AmbientLight(0x000044);
+      	scene.add(this.ambientLight);
       
 		// Directional lighting
-	    var directionalLight = new THREE.DirectionalLight(0xffffff);
-	    directionalLight.position.set(1, 1, 1).normalize();
-	    scene.add(directionalLight);
+	    this.directionalLight = new THREE.DirectionalLight(0xffffff);
+	    this.directionalLight.position.set(1, 1, 1).normalize();
+	    scene.add(this.directionalLight);
 	};
 
 	// ----------------------------------------------------------------------------------------------
