@@ -56,7 +56,7 @@
 <script type='text/javascript' src="js/libs/tween.min.js"></script>
 <script type='text/javascript' src="js/libs/OBJLoader.js"></script>
 <script type='text/javascript' src="js/libs/socket.io.js"></script>
-<script type='text/javascript' src='js/libs/DAT.GUI.min.js'></script>
+<script type='text/javascript' src='js/libs/dat.gui.min.js'></script>
 <script type='text/javascript' src="js/libs/jquery-1.11.0.min.js"></script>
 <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
 <script type='text/javascript' src="js/libs/threex.rendererstats.js"></script>
@@ -85,28 +85,37 @@
 		gl_FragColor = vec4(tColor, a);
 	}
 </script>
-<script id="spriteSheetShader" type="x-shader/x-fragment">
+
+<script id="frameShader" type="x-shader/x-fragment">
 
 	uniform sampler2D texture;
 	uniform vec3 color;
-	uniform float  tileNum;
-	uniform float  tileCount;
+	
+	uniform vec2 offset;
+	uniform vec2 frame;
+	
 	varying vec2 vUv;
 
 	void main()
 	{
-		vec2 t = vUv;
-		//tileNum/tileCount should work meanwhile we'll use this fix
-		if(tileCount>1.0){
-			t = vec2(tileNum/tileCount+vUv.x/tileCount,vUv.y);
-		}
-		
+		vec2 t = offset + frame*vUv;
 		vec3 tColor = texture2D( texture, t ).rgb;
 		float a = (length(tColor - color) - 0.5) * 7.0;
 		gl_FragColor = vec4(tColor, a);
 	}
 
 </script>
+
+<script id="vs_clouds" type="x-shader/x-vertex">
+
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
+
+</script>
+
 
 <script id="vs_clouds" type="x-shader/x-vertex">
 
@@ -143,6 +152,7 @@
 <script src="js/spritesheetmaterial.js"></script>
 <script src="js/socketManager.js"></script>
 <script src="js/human.js"></script>
+<script src="js/tower.js"></script>
 <script src="js/main.js"></script>
 
 <!-- form to find outself-->
