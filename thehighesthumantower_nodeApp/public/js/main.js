@@ -97,6 +97,15 @@
 	// animate
 	var animate = function () {
 		
+		// update values data.gui
+
+		myBackground.directionalLight.intensity = control.directionalLightIntensity;
+
+		/*
+		myBackground.directionalLight.color.setHex( control.directionalLightColor );
+-		myBackground.ambientLight.color.setHex( control.ambientLightColor );
+		*/
+
 		//controls.update();
 		stats.update();
 		TWEEN.update();
