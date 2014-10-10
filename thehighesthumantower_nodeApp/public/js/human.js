@@ -1,47 +1,65 @@
 
-function Human(){
-	THREE.Object3D.call( this );
-	//naming  this.geometry causes a error
-	var material = new SpriteSheetMaterial(Human.defaultTexture, 1,1000/6);
-	this.mesh     = new THREE.Mesh(Human.defaultGeometry, material);
-	this.add(this.mesh);
-	this.animated = false;
-	this.loader = new THREE.ImageLoader();
+function Human(id,height){
+	THREE.Mesh.call( this,Human.defaultGeometry,Human.defaultMaterial);
+	//naming  this.geometry, this.id causes a error
+	this.ident	= id;
+	this.height	= height;
 
+	this.scale.y = this.height
+	this.animated=false;
+	this.loader = null; 
 }
-Human.prototype = Object.create( THREE.Object3D.prototype );
 
+Human.prototype = Object.create( THREE.Mesh.prototype );
+//@TODO:static fields don't know if this is the best way to go
 Human.defaultTexture = new THREE.ImageUtils.loadTexture('img/monigote.jpg');
+Human.defaultMaterial = new SpriteSheetMaterial(Human.defaultTexture, 1,1,1,1,1,1000,1.0);
 //use a static geometry shared among all the instances
-Human.defaultGeometry = new THREE.PlaneGeometry(60, 105, 1, 1);
+Human.meshHeight = 105;
+Human.meshWidth  = 60;
+
+Human.defaultGeometry = new THREE.PlaneGeometry(Human.meshWidth,Human.meshHeight, 1, 1);
+
+//get human height in 3d units
+Human.prototype.getHeight = function(){
+	return Human.meshHeight*this.height;
+}
 
 //load the material with the human's texture
 Human.prototype.update = function(delta){
 	if(this.animated){
-		this.mesh.material.update(delta);	
+		this.material.update(delta);	
 	}
 }
 
+
 Human.prototype.onLoad = function(image){
+	
 	console.log("loaded");
-	var material = this.mesh.material;
-	material.texture = new THREE.Texture(image);
-	material.texture.needsUpdate = true;
-	material.numberOfTiles = 52;
+	var texture = new THREE.Texture(image);
+	this.material = new SpriteSheetMaterial(texture,150/2048*10,300/2048*6,10,6,52,6,this.height);
+	this.material.texture.needsUpdate = true;
 }
 
 Human.prototype.activate = function(active){
-	var material = this.mesh.material;
-	this.animated = active;
+	
+	if(this.animated == active){
+		return;
+	}
+	
+	this.animated = active
+	
 	if(active==true){
-		this.loader.load('img/spritesheet2.jpg?id='+Math.floor(Math.random()*1000),this.onLoad.bind(this));
+		console.log("activated:"+this.ident);
+		this.loader = new THREE.ImageLoader();
+		this.loader.load('img/spritesheet.jpg?id='+this.ident,this.onLoad.bind(this));
 	}else{
-		console.log("deactiated");
-		var texture = material.texture;
-		material.texture = Human.defaultTexture;
-		material.texture.needsUpdate = true;
-		material.numberOfTiles = 1;
-		material.update();
+		console.log("deactiated"+this.ident);
+		var texture = this.material.texture;
+		this.material = Human.defaultMaterial;
+		this.material.texture.needsUpdate = true;
+		this.loader = null;
 		texture.dispose();
 	}
+	
 }

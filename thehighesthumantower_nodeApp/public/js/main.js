@@ -1,21 +1,20 @@
 //(function () {
 	var scene = new THREE.Scene();
 	var clock = new THREE.Clock();
-	var camera = new THREE.PerspectiveCamera(50,1,0.1,200000);
-	var humanIndex = 0; //current human 
-	
-	var lookAtPos =  new THREE.Vector3();
-	var nextLookAtPos = null;
-	var moving = false;
-	camera.position.set(0, 400, 400);
-	var originalCameraYPosition = 400;
-	scene.add(camera);
+	var camera = new THREE.PerspectiveCamera(50,1,0.1,20000);
+	var tower = new Tower();
+	var camAccel  = 0;
+	var maxAccel  = 20; //max speed allowed
+	var tiltSpeed = 500;
+	var camSpeed  = 0;
+	var camTarget = new THREE.Vector3();
 
+	var moving = false;
+	camera.position.set(0, 0, 400);
+	
 	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.setClearColor(0xffffff);
 	document.getElementById('demo').appendChild(renderer.domElement);
-
-	//var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 	var floorTexture = new THREE.ImageUtils.loadTexture('checkerboard.jpg');
 	floorTexture.anisotropy = renderer.getMaxAnisotropy();
@@ -28,18 +27,29 @@
 	}));
 	floor.rotation.x = Math.PI / 2;
 	scene.add(floor);
-
-	var humans = [];
-
-	for(var i=0; i<100; i++){
-		var newHuman = new Human();
-		newHuman.position.y=105*i;
-		humans.push(newHuman);
-		scene.add(newHuman);
+	//this an object that hold camera and the tower 
+	var obj = new THREE.Object3D();
+	obj.add(camera);
+	obj.add(tower);
+	obj.position.y=88.5;
+	obj.scale.multiplyScalar(0.1);
+	scene.add(obj);
+	
+	$.getJSON( "tower.json", function( data ) {
+			tower.init(data);
+			tower.position.y=tower.height;
+		});
+	/*
+	for(var i=0; i<3000; i++){
+		var newHuman = new Human(i,1.0);
+		tower.push(newHuman);
 	}
-	lookAtPos.copy( humans[humanIndex].position);
-
-	camera.lookAt(lookAtPos);
+	*/
+	tower.position.y=tower.height;
+	
+	//lookAtPos.copy( humans[humanIndex].position);
+	//camera.lookAt(new THREE.Vector3());
+	
 	// stats
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
@@ -83,105 +93,106 @@
 	gui.add(control, 'towerY', -150, 150);
 	gui.add(control, 'towerZ', -150, 150);
 	gui.add(control, 'scaleTower', 0, 400);
-
+	
 	// animate
 	var animate = function () {
-
-		// update values data.gui
 		
-		myBackground.directionalLight.intensity = control.directionalLightIntensity;
-
-		/*
-		myBackground.directionalLight.color.setHex( control.directionalLightColor );
-		myBackground.ambientLight.color.setHex( control.ambientLightColor );
-		*/
-
 		//controls.update();
-		var delta = clock.getDelta(); 
-		for (var i in humans){
-		//	var humanObject = humans[i].movieObject;
-		//	humanObject.rotation = i/100*2*Math.PI;
-			humans[i].update(delta*1000);
-		} 
+		stats.update();
 		TWEEN.update();
 		
+		var delta = clock.getDelta(); 
+		tower.update(delta);
+		camSpeed+=camAccel;
+		
+		camSpeed*=0.99;
+		camera.position.y+=delta*camSpeed;
+		
+		if(camera.position.y<0){
+			camSpeed=(camSpeed<0)?-camSpeed:camSpeed;	
+			camAccel =  0;	
+			camera.position.y=0;
+		}
+		
+		//camera tilt
+		if(Math.abs(camSpeed)>tiltSpeed){
+			camera.rotation.x=-Math.PI/3;
+		}else{
+			camera.rotation.x=-Math.PI/3*(Math.pow(Math.abs(camSpeed)/tiltSpeed,4));
+		}
+		//activate
+		//console.log(camSpeed);
+		if(Math.abs(camSpeed)<150){
+			tower.activate(tower.getIndexAtHeight(camera.position.y));
+		}
 		
 		renderer.render(scene, camera);
 		stats.update();
 		requestAnimationFrame(animate);
 	}
-
+	
 	animate();
-
-	var onDocumentKeyDown = function(event){
+	var addHuman   = function(human){
+		tower.push(human);
+		var tween =  new TWEEN.Tween(tower.position);
+		tween.to({y:tower.height},3000);
+		tween.easing(TWEEN.Easing.Elastic.InOut);
+		tween.start();
+		//tower.position.y+=human.getHeight();
 		
-		var offset = 0 ;
+		
+	}
+	
+	var keyHandler = function(event){
+		
+		
+		if(event.type=="keyup"){	
+			if((event.keyCode == 38) || (event.keyCode == 40)){
+				camAccel = 0;
+			}
+			return;
+		}
+		
 		switch(event.keyCode){
 			//up
 			case 38:
-				offset = 1;
+				camAccel+=1;
 				break;
 			//down
 			case 40:
-				offset = -1;
+				camAccel-=1;
+				break;
+			//key 'a'
+			case 65:
+				addHuman(new Human(""+Math.floor(Math.random()*10000),0.7+Math.random()*0.3))
 				break;
 		}
 		
-		if(offset!=0 && moving==false){
-			moving=true;
-			
-			humanIndex = Math.min(Math.max(humanIndex+offset,0),humans.length-1);
-			nextLookAtPos = humans[humanIndex].position;
-			humans[humanIndex].activate(true);
-			var tween = new TWEEN.Tween(lookAtPos).to(nextLookAtPos, 200);
-			tween.onUpdate(function(){
-				camera.lookAt(lookAtPos);
-				camera.position.y=lookAtPos.y+400;
-			});
-			tween.onComplete(function(){
-				
-				if(humanIndex-2>0){
-					humans[humanIndex-2].activate(false);
-				}
-				if(humanIndex+2>humans.length){
-					humans[humanIndex+2].activate(false);
-				}
-				moving=false;
-			});
-			tween.start();	
+		if(Math.abs(camAccel)>maxAccel){
+			camAccel = (camAccel<0)?-maxAccel:maxAccel;
 		}
-		//camera.position.y=lookAtPos.y+400;
+		
 	}
-
+	document.addEventListener("keydown", keyHandler, false);
+	document.addEventListener("keyup"  , keyHandler, false);
+	
 	// Camera movement
 	var mousewheel = function ( e )
 	{
-	  var amount = 100; // parameter
+		var amount = -20; // parameter
 
-	  // get wheel direction 
-	  var d = ((typeof e.wheelDelta != "undefined")?(-e.wheelDelta):e.detail);
-	  d = 100 * ((d>0)?1:-1);
-
-	  // do calculations, I'm not using any three.js internal methods here, maybe there is a better way of doing this
-	  // applies movement in the direction of (0,0,0), assuming this is where the camera is pointing
-	  var cPos = camera.position;
-	  var r = cPos.x*cPos.x + cPos.y*cPos.y;
-	  var sqr = Math.sqrt(r);
-	  var sqrZ = Math.sqrt(cPos.z*cPos.z + r);
-	  var ny = cPos.y + ((r==0)?0:(d * cPos.y/sqr));
-
-	  // verify we're applying valid numbers
-	  if ( isNaN(ny) )
-	    return;
-	  if(ny>originalCameraYPosition){
-	  	cPos.y = ny;	
-	  }
+		// get wheel direction 
+		var d = ((typeof e.wheelDelta != "undefined")?(-e.wheelDelta):e.detail);
+		camSpeed+= amount * ((d>0)?1:-1);
+		
+		
+		console.log(camSpeed);
+		
 	}
 
 	// Window events
 	window.addEventListener('DOMMouseScroll', mousewheel, false);
 	window.addEventListener('mousewheel', mousewheel, false);
-	document.addEventListener("keydown", onDocumentKeyDown, false);
 
 	//setupSocket();
 
