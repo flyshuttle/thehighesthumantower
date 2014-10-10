@@ -103,19 +103,15 @@ function background(){
 		scene.add(self.buildings);
 	};
 
-
 	this.barcelonaSkylineFull = function (){
-		var objectPath = "all_barcelona.obj";
+		var objectPath = "obj/all_barcelona.obj";
 		var loaderId = 0;
 		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.buildings = new THREE.Object3D();
 		var manager = new THREE.LoadingManager();
 		manager.onProgress = function ( item, loaded, total ) {
 			console.log( item, loaded, total );
-			// when is finish
-			if(loaded==total){
-				$('#splash').fadeOut();
-			}
+			loadingProgress('3d',loaded, total);
 		};
 		var self = this;
 

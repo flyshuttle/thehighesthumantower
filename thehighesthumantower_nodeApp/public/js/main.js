@@ -84,7 +84,6 @@
 	
 	var onDocumentKeyDown = function(event){
 		
-	
 		var offset = 0 ;
 		switch(event.keyCode){
 			//up
@@ -172,23 +171,13 @@
 	gui.add(control, 'z', -150, 150);
 	gui.add(control, 'scaleTower', 0, 400);
 
-	// loading bar
-	var callbackProgress = function( progress, result ) {
-
-		var bar = 250,
-			total = progress.totalModels + progress.totalTextures,
-			loaded = progress.loadedModels + progress.loadedTextures;
-
-		if ( total )
-			bar = Math.floor( bar * loaded / total );
-
-		$( "bar" ).style.width = bar + "px";
-
-		count = 0;
-		for ( var m in result.materials ) count++;
-
-		handle_update( result, Math.floor( count/total ) );
-
+	// loading 
+	function loadingProgress(item,loaded, total){
+		$('#loading_label').text((loaded/ total)*100);
+		// when is finish
+		if(loaded==total){
+			$('#splash').fadeOut();
+		}
 	}
 
 	
