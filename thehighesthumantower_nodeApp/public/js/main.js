@@ -105,7 +105,6 @@
 		} 
 		TWEEN.update();
 		
-		
 		renderer.render(scene, camera);
 		stats.update();
 		requestAnimationFrame(animate);
@@ -184,6 +183,7 @@
 	document.addEventListener("keydown", onDocumentKeyDown, false);
 
 	//setupSocket();
+    //$('#form_container').hide();
 
 	// loading 
 	function loadingProgress(item,loaded, total){
@@ -191,6 +191,7 @@
 		// when is finish
 		if(loaded==total){
 			$('#splash').fadeOut();
+			//$('#form_container').show();
 		}
 	}
 

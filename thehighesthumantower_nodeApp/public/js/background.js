@@ -46,9 +46,10 @@ function background(){
 	// ----------------------------------------------------------------------------------------------
 	// Sea
 	this.sea = function (){
-		this.seaMaterial = new THREE.MeshLambertMaterial({color: 0x206ad9,side: THREE.DoubleSide});
+		this.seaMaterial = new THREE.MeshLambertMaterial({color: 0x206ad9,side: THREE.DoubleSide, opacity:0});
 		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
+		this.sea.position.y = -1;
 		scene.add(this.sea);
 	};
 
