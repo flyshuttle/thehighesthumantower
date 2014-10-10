@@ -1,33 +1,31 @@
 //(function () {
 	var scene = new THREE.Scene();
+	var sceneBackground = new THREE.Scene();
 	var clock = new THREE.Clock();
-	var camera = new THREE.PerspectiveCamera(50,1,0.1,200000);
+	
 	var tower = new Tower();
-	var camAccel  = 0;
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
+	
+	var moving = false;
+
+	// camera
+	var camAccel  = 0;
 	var camSpeed  = 0;
 	var camTarget = new THREE.Vector3();
-
-	var moving = false;
+	var camera = new THREE.PerspectiveCamera(50,1,0.1,200000);
+	var cameraBackground = new THREE.PerspectiveCamera(50,1,0.1,200000);
 	camera.position.set(0, 0, 400);
+	cameraBackground.position.set(0, 0, 400);
 	
-	//set logarithmicDepthBuffer = true to render the city 
-	renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: false });
-	renderer.setClearColor(0xffffff);
-	document.getElementById('demo').appendChild(renderer.domElement);
+	// Render the city in logarithmicDepthBuffer and tower in a normal renderer
+	var rendererBackground = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
+	rendererBackground.setClearColor(0xffffff);
+	document.getElementById('threejs_background').appendChild(rendererBackground.domElement);
 
-	var floorTexture = new THREE.ImageUtils.loadTexture('checkerboard.jpg');
-	floorTexture.anisotropy = renderer.getMaxAnisotropy();
-	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-	floorTexture.repeat.set(10, 10);
+	var renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true});
+	document.getElementById('threejs_tower').appendChild(renderer.domElement);
 
-	var floor = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000, 10, 10), new THREE.MeshBasicMaterial({
-		map: floorTexture,
-		side: THREE.DoubleSide
-	}));
-	floor.rotation.x = Math.PI / 2;
-	scene.add(floor);
 	//this an object that hold camera and the tower 
 	var obj = new THREE.Object3D();
 	obj.add(camera);
@@ -59,6 +57,12 @@
 		// update the camera
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
+
+		// notify the renderer of the size change
+		rendererBackground.setSize(window.innerWidth, window.innerHeight);
+		// update the camera
+		cameraBackground.aspect = window.innerWidth / window.innerHeight;
+		cameraBackground.updateProjectionMatrix();
 	};
 
 	window.addEventListener('resize', resize, false);
@@ -107,30 +111,34 @@
 		
 		var delta = clock.getDelta(); 
 		tower.update(delta);
-		camSpeed+=camAccel;
-		
+		camSpeed+=camAccel;	
 		camSpeed*=0.99;
 		camera.position.y+=delta*camSpeed;
+		cameraBackground.position.y = camera.position.y
 		
 		if(camera.position.y<0){
 			camSpeed=(camSpeed<0)?-camSpeed:camSpeed;	
 			camAccel =  0;	
 			camera.position.y=0;
+			cameraBackground.position.y =0;
 		}
 		
 		//camera tilt
 		if(Math.abs(camSpeed)>tiltSpeed){
 			camera.rotation.x=-Math.PI/3;
+			cameraBackground.rotation.x = camera.rotation.x;
 		}else{
 			camera.rotation.x=-Math.PI/3*(Math.pow(Math.abs(camSpeed)/tiltSpeed,4));
+			cameraBackground.rotation.x = camera.rotation.x;
 		}
+
 		//activate
-		//console.log(camSpeed);
 		if(Math.abs(camSpeed)<150){
 			tower.activate(tower.getIndexAtHeight(camera.position.y));
 		}
 		
 		renderer.render(scene, camera);
+		rendererBackground.render(sceneBackground, cameraBackground);
 		stats.update();
 		requestAnimationFrame(animate);
 	}

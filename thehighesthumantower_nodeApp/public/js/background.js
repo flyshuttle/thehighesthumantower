@@ -50,7 +50,7 @@ function background(){
 		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
 		this.sea.position.y = -1;
-		scene.add(this.sea);
+		sceneBackground.add(this.sea);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ function background(){
 		var scaleFactor = 10.0;	
 		self.buildings.rotation.y = 0.76;
 		self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
-		scene.add(self.buildings);
+		sceneBackground.add(self.buildings);
 	};
 
 	this.barcelonaSkylineFull = function (){
@@ -129,7 +129,7 @@ function background(){
 		var scaleFactor = 10.0;	
 		self.buildings.rotation.y = 0.76;
 		self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
-		scene.add(self.buildings);
+		sceneBackground.add(self.buildings);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ function background(){
 		// Directional lighting
 	    this.directionalLight = new THREE.DirectionalLight(0xffffff);
 	    this.directionalLight.position.set(1, 1, 1).normalize();
-	    scene.add(this.directionalLight);
+	    sceneBackground.add(this.directionalLight);
 	};
 
 	// ----------------------------------------------------------------------------------------------
