@@ -14,9 +14,7 @@
 	var camSpeed  = 0;
 	var camTarget = new THREE.Vector3();
 	var camera = new THREE.PerspectiveCamera(50,1,0.1,200000);
-	var cameraBackground = new THREE.PerspectiveCamera(50,1,0.1,200000);
 	camera.position.set(0, 0, 400);
-	cameraBackground.position.set(0, 0, 400);
 	
 	// Render the city in logarithmicDepthBuffer and tower in a normal renderer
 	var rendererBackground = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
@@ -60,9 +58,6 @@
 
 		// notify the renderer of the size change
 		rendererBackground.setSize(window.innerWidth, window.innerHeight);
-		// update the camera
-		cameraBackground.aspect = window.innerWidth / window.innerHeight;
-		cameraBackground.updateProjectionMatrix();
 	};
 
 	window.addEventListener('resize', resize, false);
@@ -114,22 +109,18 @@
 		camSpeed+=camAccel;	
 		camSpeed*=0.99;
 		camera.position.y+=delta*camSpeed;
-		cameraBackground.position.y = camera.position.y
 		
 		if(camera.position.y<0){
 			camSpeed=(camSpeed<0)?-camSpeed:camSpeed;	
 			camAccel =  0;	
 			camera.position.y=0;
-			cameraBackground.position.y =0;
 		}
 		
 		//camera tilt
 		if(Math.abs(camSpeed)>tiltSpeed){
 			camera.rotation.x=-Math.PI/3;
-			cameraBackground.rotation.x = camera.rotation.x;
 		}else{
 			camera.rotation.x=-Math.PI/3*(Math.pow(Math.abs(camSpeed)/tiltSpeed,4));
-			cameraBackground.rotation.x = camera.rotation.x;
 		}
 
 		//activate
@@ -138,7 +129,7 @@
 		}
 		
 		renderer.render(scene, camera);
-		rendererBackground.render(sceneBackground, cameraBackground);
+		rendererBackground.render(sceneBackground, camera);
 		stats.update();
 		requestAnimationFrame(animate);
 	}
