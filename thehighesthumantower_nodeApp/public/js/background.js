@@ -49,7 +49,7 @@ function background(){
 		this.seaMaterial = new THREE.MeshLambertMaterial({color: 0x206ad9,side: THREE.DoubleSide, opacity:0});
 		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
-		this.sea.position.y = -1;
+		this.sea.position.y = 0;
 		sceneBackground.add(this.sea);
 	};
 
@@ -105,7 +105,7 @@ function background(){
 	};
 
 	this.barcelonaSkylineFull = function (){
-		var objectPath = "obj/all_barcelona.obj";
+		var objectPath = "obj/barcelona_visioncompleta_ok.obj";
 		var loaderId = 0;
 		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.buildings = new THREE.Object3D();
@@ -194,7 +194,7 @@ function background(){
 	// ----------------------------------------------------------------------------------------------
 	//this.skyDomeImages();
 	//this.floor();
-	this.barcelonaSkyline();
+	this.barcelonaSkylineFull();
 	this.lights();
 	this.sea();
 	//this.fog();
