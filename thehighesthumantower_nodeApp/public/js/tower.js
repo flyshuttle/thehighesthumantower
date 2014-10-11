@@ -49,6 +49,19 @@ Tower = function(){
 		
 	}
 	
+	//get the nearest human to certain height
+	this.getHeightAtIndex = function(index){
+		var height = 0;
+		var i=this.humans.length-1;
+		while(i>0 && i>index){
+			height+=this.humans[i].getHeight();
+			i--;
+		}
+		return height;
+		
+	}
+	
+	
 	this.update = function(ms){
 		var i;
 		for(i in this.activeHumans){

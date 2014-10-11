@@ -6,9 +6,12 @@
 	var tower = new Tower();
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
+	var activationSpeed = 150; //when camSpeed < activationSpeed star activating humans
+	var activationEnabled = true; //camera moving to an id
 	
-	var moving = false;
-
+	var climbSpeed = 1; //speed when finding a person m/s
+	var climbMinTime = 1000; //minimum time to climb to a person
+	
 	// camera
 	var camAccel  = 0;
 	var camSpeed  = 0;
@@ -28,7 +31,7 @@
 	var obj = new THREE.Object3D();
 	obj.add(camera);
 	obj.add(tower);
-	obj.position.y=88.5; 
+	obj.position.y=30; 
 	obj.scale.multiplyScalar(0.1);
 	scene.add(obj);
 	
@@ -88,6 +91,10 @@
 	gui.add(control, 'towerZ', -150, 150);
 	gui.add(control, 'scaleTower', 0, 400);
 	
+	//form
+	$('#findbtn').click(formHandler);	
+	$('#findform').submit(formHandler);
+	
 	//altimeter
 	var altimeter = $('#altimeter');
 	
@@ -131,7 +138,7 @@
 		altimeter.text(""+(camera.position.y*(Human.realHeight/Human.meshHeight)).toFixed(2)+"m");
 		
 		//activate
-		if(Math.abs(camSpeed)<150){
+		if(activationEnabled && Math.abs(camSpeed)<activationSpeed ){
 			tower.activate(tower.getIndexAtHeight(camera.position.y));
 		}
 		
@@ -151,6 +158,22 @@
 		//tower.position.y+=human.getHeight();
 		
 		
+	}
+	
+	var gotoId = function(id){
+		//climb dist in meters
+		var destHeight = tower.getHeightAtIndex(id);
+		var climbDist = Math.abs(camera.position.y-destHeight)*(Human.realHeight/Human.meshHeight);
+		var climbTime = Math.max(climbMinTime,climbDist/climbSpeed);
+		
+		var tween =  new TWEEN.Tween(camera.position);
+		camSpeed = 0;
+		camAccel = 0;
+		activationEnabled = false;
+		tween.to({y:destHeight},climbTime);
+		tween.easing(TWEEN.Easing.Sinusoidal.InOut);
+		tween.onComplete(function(){activationEnabled=true;});
+		tween.start();	
 	}
 	
 	var keyHandler = function(event){
@@ -195,9 +218,6 @@
 		var d = ((typeof e.wheelDelta != "undefined")?(-e.wheelDelta):e.detail);
 		camSpeed+= amount * ((d>0)?1:-1);
 		
-		
-		console.log(camSpeed);
-		
 	}
 
 	// Window events
@@ -205,7 +225,16 @@
 	window.addEventListener('mousewheel', mousewheel, false);
 
 	//setupSocket();
-
+	
+	//form
+	function formHandler(){
+		event.preventDefault();
+		var fieldValue = parseInt($('#findfield').val());
+		if(!isNaN(fieldValue) && fieldValue>=0 && fieldValue<tower.humans.length){
+			gotoId(fieldValue);
+		}
+	}
+	
 	// loading 
 	function loadingProgress(item,loaded, total){
 		$('#loading_label').text((loaded/ total)*100);
