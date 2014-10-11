@@ -17,6 +17,7 @@ Human.defaultMaterial = new SpriteSheetMaterial(Human.defaultTexture, 1,1,1,1,1,
 //use a static geometry shared among all the instances
 Human.meshHeight = 105;
 Human.meshWidth  = 60;
+Human.realHeight = 1.8; //height in meters 
 
 Human.defaultGeometry = new THREE.PlaneGeometry(Human.meshWidth,Human.meshHeight, 1, 1);
 

@@ -32,7 +32,7 @@
 	obj.scale.multiplyScalar(0.1);
 	scene.add(obj);
 	
-	$.getJSON( "tower.json", function( data ) {
+	$.getJSON( "tower2.json", function( data ) {
 			tower.init(data);
 			tower.position.y=tower.height;
 		});
@@ -88,6 +88,10 @@
 	gui.add(control, 'towerZ', -150, 150);
 	gui.add(control, 'scaleTower', 0, 400);
 	
+	//altimeter
+	var altimeter = $('#altimeter');
+	
+	
 	// animate
 	var animate = function () {
 		
@@ -99,11 +103,11 @@
 		myBackground.directionalLight.color.setHex( control.directionalLightColor );
 -		myBackground.ambientLight.color.setHex( control.ambientLightColor );
 		*/
-
-		//controls.update();
+		
 		stats.update();
 		TWEEN.update();
 		
+		//camera speed
 		var delta = clock.getDelta(); 
 		tower.update(delta);
 		camSpeed+=camAccel;	
@@ -122,7 +126,10 @@
 		}else{
 			camera.rotation.x=-Math.PI/3*(Math.pow(Math.abs(camSpeed)/tiltSpeed,4));
 		}
-
+		
+		//altimeter
+		altimeter.text(""+(camera.position.y*(Human.realHeight/Human.meshHeight)).toFixed(2)+"m");
+		
 		//activate
 		if(Math.abs(camSpeed)<150){
 			tower.activate(tower.getIndexAtHeight(camera.position.y));

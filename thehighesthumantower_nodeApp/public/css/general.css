@@ -60,6 +60,14 @@ body {
 	to { -webkit-transform: rotate(360deg); }
 }
 
+#altimeter{
+	position: absolute;
+	bottom: 0px; 
+	left:250px;
+	font-size:24px;
+}
+
+
 #form_container{
 	position: absolute;
 	bottom: 50px; 
