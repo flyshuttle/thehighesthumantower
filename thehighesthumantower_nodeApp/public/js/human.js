@@ -19,6 +19,8 @@ Human.meshHeight = 105;
 Human.meshWidth  = 60;
 Human.realHeight = 1.8; //height in meters 
 
+Human.textureSize = 1024;
+
 Human.defaultGeometry = new THREE.PlaneGeometry(Human.meshWidth,Human.meshHeight, 1, 1);
 
 //get human height in 3d units
@@ -38,8 +40,9 @@ Human.prototype.onLoad = function(image){
 	
 	console.log("loaded");
 	var texture = new THREE.Texture(image);
-	this.material = new SpriteSheetMaterial(texture,150/2048*10,300/2048*6,10,6,52,6,this.height);
+	this.material = new SpriteSheetMaterial(texture,(102*10)/1024,(204*5)/1024,10,5,50,6,this.height);
 	this.material.texture.needsUpdate = true;
+	
 }
 
 Human.prototype.activate = function(active){
@@ -53,7 +56,7 @@ Human.prototype.activate = function(active){
 	if(active==true){
 		console.log("activated:"+this.ident);
 		this.loader = new THREE.ImageLoader();
-		this.loader.load('img/spritesheet.jpg?id='+this.ident,this.onLoad.bind(this));
+		this.loader.load('img/spritesheet'+Human.textureSize+'.jpg?id='+this.ident,this.onLoad.bind(this));
 	}else{
 		console.log("deactiated"+this.ident);
 		var texture = this.material.texture;

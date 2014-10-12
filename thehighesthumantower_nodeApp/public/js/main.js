@@ -6,6 +6,7 @@
 	var tower = new Tower();
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
+	var tiltAngle = 60;
 	var activationSpeed = 150; //when camSpeed < activationSpeed star activating humans
 	var activationEnabled = true; //camera moving to an id
 	
@@ -76,20 +77,29 @@
 		directionalLightColor: '#ffffff',
 		directionalLightIntensity: 0.5,
 		ambientLightColor: '#000044',
-		towerX: 0,
-		towerY: 0,
-		towerZ: 0,
-		scaleTower: 0
 	};
 
 	gui.addColor(control, 'directionalLightColor');
 	gui.add(control, 'directionalLightIntensity', 0, 5, 0.1);
 	gui.addColor(control, 'ambientLightColor');
-
-	gui.add(control, 'towerX', -150, 150);
-	gui.add(control, 'towerY', -150, 150);
-	gui.add(control, 'towerZ', -150, 150);
-	gui.add(control, 'scaleTower', 0, 400);
+	
+	var humanGui = gui.addFolder('Human');	 
+	humanGui.add(Human,'textureSize',[512,1024,2048]);
+	humanGui.add(this, 'activationSpeed', 0, 1000);
+	var towerGui = gui.addFolder('Tower');	
+	towerGui.add(obj.position, 'x', -50, 50);
+	towerGui.add(obj.position, 'y', -50, 50);
+	towerGui.add(obj.position, 'z', -50, 50);
+	
+	var camGui = gui.addFolder('Camera');	
+	camGui.add(this, 'maxAccel', 0, 50);
+	camGui.add(this, 'tiltSpeed', 0, 1000);
+	camGui.add(this, 'tiltAngle', 0, 90);
+	camGui.add(camera.position, 'z', 0, 1000);
+	
+	var findGui = gui.addFolder('Find');	
+	findGui.add(this, 'climbSpeed', 0, 5);
+	findGui.add(this, 'climbMinTime', 0, 5000);
 	
 	//form
 	$('#findbtn').click(formHandler);	
@@ -129,9 +139,10 @@
 		
 		//camera tilt
 		if(Math.abs(camSpeed)>tiltSpeed){
-			camera.rotation.x=-Math.PI/3;
+			camera.rotation.x=-tiltAngle * (Math.PI/180);
 		}else{
-			camera.rotation.x=-Math.PI/3*(Math.pow(Math.abs(camSpeed)/tiltSpeed,4));
+			//cubic.	
+			camera.rotation.x=-tiltAngle*(Math.PI/180)*(Math.pow(Math.abs(camSpeed)/tiltSpeed,3));
 		}
 		
 		//altimeter

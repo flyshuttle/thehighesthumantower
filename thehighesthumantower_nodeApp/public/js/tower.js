@@ -4,6 +4,7 @@ Tower = function(){
 	this.activeHumans = [];
 	this.maxActiveHumans = 10;
 	this.height = 0;
+	
 	this.init = function(array){
 		var totalHeight = 0;
 		var i;
