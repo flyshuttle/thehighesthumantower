@@ -5,6 +5,7 @@ Tower = function(){
 	this.maxActiveHumans = 10;
 	this.height = 0;
 	this.spritesheets = [];
+	this.textureSize = 1024;
 	
 	this.init = function(array){
 		var i;
@@ -22,7 +23,7 @@ Tower = function(){
 		
 		//load spriteSheets
 		for(i=0;i<=Math.floor(array.length/128);i++){
-			this.spritesheets.push(new THREE.ImageUtils.loadTexture('img/people/1024/people'+i+'.jpg'));
+			this.spritesheets.push(new THREE.ImageUtils.loadTexture('img/people/'+this.textureSize+'/people'+i+'.jpg'));
 		}
 		
 		for(i=0;i<array.length;i++){
@@ -37,11 +38,39 @@ Tower = function(){
 		}
 	}
 	
+	this.initTexture = function(textureSize){
+		this.textureSize = textureSize;
+		//load spriteSheets
+		var i;
+		for(i=0;i<this.spritesheets.length;i++){
+			var imgloader = new THREE.ImageLoader();
+			imgloader.load('img/people/'+this.textureSize+'/people'+i+'.jpg', function(image) {
+				var url  = image.src;
+				//Retrieve the index of the image from the url, I don't know if there is a better way
+				//like passing a second parameter to the eventHandler
+				var index = parseInt(url.substring(url.lastIndexOf('people')+6,url.lastIndexOf('.jpg')));
+				this.spritesheets[index].image = image;
+				this.spritesheets[index].needsUpdate = true;
+				console.log(index +"loaded!");
+				
+			}.bind(this));
+		}
+		
+	}
+	
 	this.push = function(human){
 		this.humans.push(human);
 		human.position.y=-(this.height+human.getHeight()/2);
 		this.height += human.getHeight();
 		this.add(human);
+	}
+	
+	this.deactivateAll = function(){
+		console.log('deactivate All');
+		for(var i=0;i<this.activeHumans.length;i++){
+			this.activeHumans[i].activate(false);
+		}
+		this.activeHumans = []; 
 	}
 	
 	this.activate = function(index){

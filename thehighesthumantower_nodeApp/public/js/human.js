@@ -61,7 +61,6 @@ Human.prototype.activate = function(active){
 		var texture = this.material.texture;
 		this.material = this.inactiveMaterial;
 		this.material.texture.needsUpdate = true;
-		
 		texture.dispose();
 	}
 	

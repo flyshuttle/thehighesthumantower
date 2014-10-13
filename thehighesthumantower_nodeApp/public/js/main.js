@@ -77,6 +77,7 @@
 		directionalLightColor: '#ffffff',
 		directionalLightIntensity: 0.5,
 		ambientLightColor: '#000044',
+		textureSize:tower.textureSize//inactive TextureSize
 	};
 
 	gui.addColor(control, 'directionalLightColor');
@@ -84,12 +85,17 @@
 	gui.addColor(control, 'ambientLightColor');
 	
 	var humanGui = gui.addFolder('Human');	 
-	humanGui.add(Human,'textureSize',[512,1024,2048]);
+	var humanTextureSizeControllertower = humanGui.add(Human,'textureSize',[512,1024,2048]);
+	humanTextureSizeControllertower.onFinishChange(tower.deactivateAll.bind(tower));
+	
 	humanGui.add(this, 'activationSpeed', 0, 1000);
+	
 	var towerGui = gui.addFolder('Tower');	
 	towerGui.add(obj.position, 'x', -50, 50);
 	towerGui.add(obj.position, 'y', -50, 50);
 	towerGui.add(obj.position, 'z', -50, 50);
+	var towerTextureSizeControllertower = towerGui.add(control, 'textureSize', [512,1024,2048]);
+	
 	
 	var camGui = gui.addFolder('Camera');	
 	camGui.add(this, 'maxAccel', 0, 50);
