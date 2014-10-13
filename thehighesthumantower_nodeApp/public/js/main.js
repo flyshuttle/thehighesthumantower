@@ -17,7 +17,7 @@
 	var camAccel  = 0;
 	var camSpeed  = 0;
 	var camTarget = new THREE.Vector3();
-	var camera = new THREE.PerspectiveCamera(50,1,0.1,200000);
+	var camera = new THREE.PerspectiveCamera(50,1,0.01,2000000);
 	camera.position.set(0, 0, 400);
 	
 	// Render the city in logarithmicDepthBuffer and tower in a normal renderer

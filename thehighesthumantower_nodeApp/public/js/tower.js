@@ -4,16 +4,35 @@ Tower = function(){
 	this.activeHumans = [];
 	this.maxActiveHumans = 10;
 	this.height = 0;
+	this.spritesheets = [];
 	
 	this.init = function(array){
-		var totalHeight = 0;
 		var i;
+		
+		//kill all (previous) humans
 		for(i=0;i<this.humans.lenght;i++){
 			this.remove(human);
 		}
+		
+		//init properties
+		this.height = 0;
+		this.spritesheets = [];
+		this.humans = []; 
+		this.activeHumans = [];
+		
+		//load spriteSheets
+		for(i=0;i<=Math.floor(array.length/128);i++){
+			this.spritesheets.push(new THREE.ImageUtils.loadTexture('img/people/1024/people'+i+'.jpg'));
+		}
+		
 		for(i=0;i<array.length;i++){
-			var data   = array[i]; //[id,height]
-			var human  = new Human(data[0],data[1]);
+			var id     = array[i][0]; //[id,height]
+			var height = array[i][1];
+			var spriteSheet = this.spritesheets[Math.floor(i/128)];
+			var spriteIndex = i % 128;
+			var material = new SpriteSheetMaterial(spriteSheet,1,1,16,8,128,0,height);
+			material.gotoFrame(spriteIndex);
+			var human  = new Human(id,height,material);
 			this.push(human);
 		}
 	}

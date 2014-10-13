@@ -1,27 +1,26 @@
 
-function Human(id,height){
-	THREE.Mesh.call( this,Human.defaultGeometry,Human.defaultMaterial);
+function Human(id,height,material){
+	
+	THREE.Mesh.call( this,Human.defaultGeometry,material);
 	//naming  this.geometry, this.id causes a error
 	this.ident	= id;
 	this.height	= height;
-
+	this.inactiveMaterial = material;
 	this.scale.y = this.height
 	this.animated=false;
 	this.loader = null; 
 }
 
 Human.prototype = Object.create( THREE.Mesh.prototype );
-//@TODO:static fields don't know if this is the best way to go
-Human.defaultTexture = new THREE.ImageUtils.loadTexture('img/monigote.jpg');
-Human.defaultMaterial = new SpriteSheetMaterial(Human.defaultTexture, 1,1,1,1,1,1000,1.0);
-//use a static geometry shared among all the instances
+
 Human.meshHeight = 105;
 Human.meshWidth  = 60;
-Human.realHeight = 1.8; //height in meters 
+
+//use a static geometry shared among all the instances
+Human.defaultGeometry = new THREE.PlaneGeometry(Human.meshWidth,Human.meshHeight, 1, 1);
 
 Human.textureSize = 1024;
-
-Human.defaultGeometry = new THREE.PlaneGeometry(Human.meshWidth,Human.meshHeight, 1, 1);
+Human.realHeight = 1.8; //height in meters 
 
 //get human height in 3d units
 Human.prototype.getHeight = function(){
@@ -42,7 +41,7 @@ Human.prototype.onLoad = function(image){
 	var texture = new THREE.Texture(image);
 	this.material = new SpriteSheetMaterial(texture,(102*10)/1024,(204*5)/1024,10,5,50,6,this.height);
 	this.material.texture.needsUpdate = true;
-	
+	this.loader = null; //free the loader 
 }
 
 Human.prototype.activate = function(active){
@@ -60,9 +59,9 @@ Human.prototype.activate = function(active){
 	}else{
 		console.log("deactiated"+this.ident);
 		var texture = this.material.texture;
-		this.material = Human.defaultMaterial;
+		this.material = this.inactiveMaterial;
 		this.material.texture.needsUpdate = true;
-		this.loader = null;
+		
 		texture.dispose();
 	}
 	

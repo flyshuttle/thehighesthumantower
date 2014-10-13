@@ -17,11 +17,13 @@ SpriteSheetMaterial = function (texture,spriteSheetWidthRatio,spriteSheetHeightR
 	this.offset		= new THREE.Vector2(0.0,1-this.frame.y);
 	
 	this.keyColorObject = new THREE.Color(0xd400);
+	
 	this.texture.minFilter = THREE.LinearFilter;
 	this.texture.magFilter = THREE.LinearFilter;
 
 	// how long should each image be displayed?
-	this.tileDisplayDuration = 1.0/fps;
+	
+	this.tileDisplayDuration = (fps==0)?0:1.0/fps;
 
 	// how long has the current image been displayed?
 	this.currentDisplayTime = 0;
@@ -34,7 +36,7 @@ SpriteSheetMaterial = function (texture,spriteSheetWidthRatio,spriteSheetHeightR
 		
 		this.currentDisplayTime += sec;
 		
-		if(this.currentDisplayTime > this.tileDisplayDuration){
+		if(this.tileDisplayDuration>0 && this.currentDisplayTime > this.tileDisplayDuration){
 		
 			this.currentTile=this.currentTile+this.playerSpeed;
 			//pingpong loop
@@ -48,8 +50,7 @@ SpriteSheetMaterial = function (texture,spriteSheetWidthRatio,spriteSheetHeightR
 			this.gotoFrame(this.currentTile);
 			this.currentDisplayTime = 0;
 			
-		}
-// 		
+		}	
 	}
 
 	this.gotoFrame =  function(framenum){
