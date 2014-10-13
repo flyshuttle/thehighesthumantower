@@ -49,7 +49,7 @@ function background(){
 		this.seaMaterial = new THREE.MeshLambertMaterial({color: 0x206ad9,side: THREE.DoubleSide, opacity:0});
 		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
-		this.sea.position.y = 0;
+		this.sea.position.y = 5;
 		sceneBackground.add(this.sea);
 	};
 
@@ -105,7 +105,7 @@ function background(){
 	};
 
 	this.barcelonaSkylineFull = function (){
-		var objectPath = "obj/barcelona_visioncompleta_ok.obj";
+		var objectPath = "obj/barcelona_plano_ok_perfect2.obj";
 		var loaderId = 0;
 		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.buildings = new THREE.Object3D();
@@ -127,7 +127,7 @@ function background(){
 		});
 		// map transformation
 		var scaleFactor = 10.0;	
-		self.buildings.rotation.y = 0.76;
+		//self.buildings.rotation.y = 0.76;
 		self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
 		sceneBackground.add(self.buildings);
 	};
