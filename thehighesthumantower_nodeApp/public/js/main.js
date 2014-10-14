@@ -95,6 +95,7 @@
 	towerGui.add(obj.position, 'y', -50, 50);
 	towerGui.add(obj.position, 'z', -50, 50);
 	var towerTextureSizeControllertower = towerGui.add(control, 'textureSize', [512,1024,2048]);
+	towerTextureSizeControllertower.onFinishChange(tower.initTexture.bind(tower));
 	
 	
 	var camGui = gui.addFolder('Camera');	
