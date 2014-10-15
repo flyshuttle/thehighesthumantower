@@ -47,9 +47,9 @@ function background(){
 	// Sea
 	this.sea = function (){
 		this.seaMaterial = new THREE.MeshLambertMaterial({color: 0x206ad9,side: THREE.DoubleSide, opacity:0});
-		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 10, 10), this.seaMaterial );
+		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(1000000, 1000000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
-		this.sea.position.y = 5;
+		this.sea.position.y = 0;
 		sceneBackground.add(this.sea);
 	};
 
@@ -70,19 +70,17 @@ function background(){
 	};
 
 	// ----------------------------------------------------------------------------------------------
-	// BarcelonaSkyline
-	this.barcelonaSkyline = function (){
-		var objectPath = 'obj/barcelonaenorigen0_3.obj';
+	// Barcelona 3D models
+	this.barcelonaCouncil = function (){
+		var objectPath = 'obj/facade_barcelona_councilHouse.obj';
 
 		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
-		this.buildings = new THREE.Object3D();
-		this.geometry = null;
+		this.councilbuilding = new THREE.Object3D();
+		this.geometryCouncilBuilding = null;
 		var manager = new THREE.LoadingManager();
 		manager.onProgress = function ( item, loaded, total ) {
 			console.log( item, loaded, total );
-			if(loaded==total){
-				$('#splash').fadeOut();
-			}
+			loadingProgress('council',loaded, total);
 		};
 		var self = this;
 		var loader = new THREE.OBJLoader( manager );
@@ -90,24 +88,61 @@ function background(){
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
 					child.material = self.buildingMaterial;
-					this.geometry = child.geometry;
+					this.geometryCouncilBuilding = child.geometry;
 				}
-				self.buildings.add( object );
+				self.councilbuilding.add( object );
 			} );
 
 		} );
 
-		// map transformation
-		var scaleFactor = 10.0;	
-		self.buildings.rotation.y = 0.76;
-		self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
-		sceneBackground.add(self.buildings);
+		// model transformation
+		self.councilbuilding.position.x = 18.96;
+		self.councilbuilding.position.y = 9.10;
+		self.councilbuilding.position.z = -12.17;
+		var scaleFactor = 3.0;	
+		self.councilbuilding.rotation.x = 1.56;
+		self.councilbuilding.rotation.z = 0.01;
+		self.councilbuilding.scale.set( scaleFactor, scaleFactor, scaleFactor);
+		sceneBackground.add(self.councilbuilding);
 	};
+	// ----------------------------------------------------------------------------------------------
+	this.barcelonaFloorCouncil = function (){
+		var objectPath = 'obj/floor_square_barcelona_councilHouse.obj';
+		this.councilFloorMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+		this.councilFloor = new THREE.Object3D();
+		this.geometryFloorCouncil = null;
+		var manager = new THREE.LoadingManager();
+		manager.onProgress = function ( item, loaded, total ) {
+			console.log( item, loaded, total );
+			loadingProgress('council',loaded, total);
+		};
+		var self = this;
+		var loader = new THREE.OBJLoader( manager );
+		loader.load( objectPath, function ( object ) {
+			object.traverse( function ( child ) {
+				if ( child instanceof THREE.Mesh ) {
+					child.material = self.councilMaterial;
+					this.geometryFloorCouncil = child.geometry;
+				}
+				self.councilFloor.add( object );
+			} );
+		} );
 
+		// map transformation
+		self.councilFloor.position.x = -30.56;
+		self.councilFloor.position.y = 9.41;
+		self.councilFloor.position.z = 18.57;
+		self.councilFloor.rotation.y = 0.04;
+
+		var scaleFactor = 4.48;	
+		self.councilFloor.scale.set( scaleFactor, scaleFactor, scaleFactor);
+		sceneBackground.add(self.councilFloor);
+	};
+	// ----------------------------------------------------------------------------------------------
 	this.barcelonaSkylineFull = function (){
-		var objectPath = "obj/barcelona_plano_ok_perfect2.obj";
+		var objectPath = "obj/barcelona_city.obj";
 		var loaderId = 0;
-		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+		this.buildingsMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.buildings = new THREE.Object3D();
 		var manager = new THREE.LoadingManager();
 		manager.onProgress = function ( item, loaded, total ) {
@@ -120,13 +155,13 @@ function background(){
 		loader.load( objectPath, function ( object ) {
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
-					child.material = self.buildingMaterial;
+					child.material = self.buildingsMaterial;
 				}
 				self.buildings.add( object );
 			});
 		});
 		// map transformation
-		var scaleFactor = 10.0;	
+		var scaleFactor = 1.0;	
 		//self.buildings.rotation.y = 0.76;
 		self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
 		sceneBackground.add(self.buildings);
@@ -143,6 +178,10 @@ function background(){
 	    this.directionalLight = new THREE.DirectionalLight(0xffffff);
 	    this.directionalLight.position.set(1, 1, 1).normalize();
 	    sceneBackground.add(this.directionalLight);
+
+	    // Spot light
+	    //this.spotLight = new THREE.DirectionalLight(0xffffff);
+
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -178,7 +217,6 @@ function background(){
 		    planeMesh.rotation.z = Math.random() * Math.PI;
 		    planeMesh.scale.x = planeMesh.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
 		    THREE.GeometryUtils.merge(geometry, planeMesh);
-
 		}
 
 		mesh = new THREE.Mesh(geometry, meshMaterial);
@@ -192,11 +230,12 @@ function background(){
 	// ----------------------------------------------------------------------------------------------
 	// Setup
 	// ----------------------------------------------------------------------------------------------
-	//this.skyDomeImages();
-	//this.floor();
+	
 	this.barcelonaSkylineFull();
+	this.barcelonaCouncil();
+	//this.barcelonaFloorCouncil();
 	this.lights();
-	this.sea();
+	//this.sea();
 	//this.fog();
 	//this.clouds();
 	// ----------------------------------------------------------------------------------------------

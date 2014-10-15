@@ -242,8 +242,19 @@
 	window.addEventListener('DOMMouseScroll', mousewheel, false);
 	window.addEventListener('mousewheel', mousewheel, false);
 
-	//setupSocket();
-	
+	// Event pan with for tablets (hammer.js)
+	var myElement = document.getElementById('threejs_tower');
+	var myOptions  = {'threshold':10};
+	var hammertime = new Hammer(myElement, myOptions);
+		hammertime.on('panup pandown', function(ev) {
+    	console.log(ev);
+    	if(ev.type=='panup'){
+    		camAccel+=1;
+    	}else if(ev.type=='pandown'){
+    		camAccel-=1;
+    	}
+	});
+
 	//form
 	function formHandler(){
 		event.preventDefault();
@@ -261,5 +272,8 @@
 			$('#splash').fadeOut();
 		}
 	}
+
+	//setupSocket();
+	
 
 	
