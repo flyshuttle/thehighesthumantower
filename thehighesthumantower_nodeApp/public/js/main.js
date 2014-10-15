@@ -32,8 +32,8 @@
 	var obj = new THREE.Object3D();
 	obj.add(camera);
 	obj.add(tower);
-	obj.position.y=30; 
-	obj.scale.multiplyScalar(0.1);
+	obj.position.y=9; 
+	obj.scale.multiplyScalar(0.01);
 	scene.add(obj);
 	
 	$.getJSON( "tower2.json", function( data ) {
