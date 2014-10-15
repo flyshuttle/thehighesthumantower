@@ -178,6 +178,10 @@ function background(){
 	    this.directionalLight = new THREE.DirectionalLight(0xffffff);
 	    this.directionalLight.position.set(1, 1, 1).normalize();
 	    sceneBackground.add(this.directionalLight);
+
+	    // Spot light
+	    //this.spotLight = new THREE.DirectionalLight(0xffffff);
+
 	};
 
 	// ----------------------------------------------------------------------------------------------
