@@ -235,7 +235,7 @@ function background(){
 	this.barcelonaCouncil();
 	//this.barcelonaFloorCouncil();
 	this.lights();
-	//this.sea();
+	this.sea();
 	//this.fog();
 	//this.clouds();
 	// ----------------------------------------------------------------------------------------------
