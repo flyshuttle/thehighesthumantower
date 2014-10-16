@@ -40,7 +40,6 @@
 			tower.init(data);
 			tower.position.y=tower.height;
 		});
-	tower.position.y=tower.height;
 	
 	//lookAtPos.copy( humans[humanIndex].position);
 	//camera.lookAt(new THREE.Vector3());
@@ -91,18 +90,35 @@
 	humanGui.add(this, 'activationSpeed', 0, 1000);
 	
 	var towerGui = gui.addFolder('Tower');	
-	towerGui.add(obj.position, 'x', -50, 50);
-	towerGui.add(obj.position, 'y', -50, 50);
-	towerGui.add(obj.position, 'z', -50, 50);
-	var towerTextureSizeControllertower = towerGui.add(control, 'textureSize', [512,1024,2048]);
-	towerTextureSizeControllertower.onFinishChange(tower.initTexture.bind(tower));
-	
+	towerGui.add(obj.position, 'x', -500, 500);
+	towerGui.add(obj.position, 'y', -500, 500);
+	towerGui.add(obj.position, 'z', -500, 500);
+	var towerTextureSizeController = towerGui.add(control, 'textureSize', [512,1024,2048]);
+	towerTextureSizeController.onFinishChange(tower.initTexture.bind(tower));
+	var towerAutoHideController    = towerGui.add(tower, 'autoHide', true);
+	towerAutoHideController.onFinishChange(
+		function(){
+			console.log(tower.autoHide);
+			if(tower.autoHide){
+				tower.visibleIndex = 0;
+				console.log("removing all humans");
+				tower.removeAll();
+				console.log("removed");
+			}else{
+				console.log("adding all humans");
+				tower.addAll();
+				console.log("added");
+			}
+		
+		}
+		
+	);
 	
 	var camGui = gui.addFolder('Camera');	
-	camGui.add(this, 'maxAccel', 0, 50);
-	camGui.add(this, 'tiltSpeed', 0, 1000);
-	camGui.add(this, 'tiltAngle', 0, 90);
-	camGui.add(camera.position, 'z', 0, 1000);
+	camGui.add(this, 'maxAccel' ,  0, 50);
+	camGui.add(this, 'tiltSpeed',  0, 1000);
+	camGui.add(this, 'tiltAngle',  0, 90);
+	camGui.add(camera.position  ,'z', 0, 1000);
 	
 	var findGui = gui.addFolder('Find');	
 	findGui.add(this, 'climbSpeed', 0, 5);
@@ -138,6 +154,7 @@
 		camSpeed*=0.99;
 		camera.position.y+=delta*camSpeed;
 		
+		//crash to the floor
 		if(camera.position.y<0){
 			camSpeed=(camSpeed<0)?-camSpeed:camSpeed;	
 			camAccel =  0;	
@@ -160,22 +177,22 @@
 			tower.activate(tower.getIndexAtHeight(camera.position.y));
 		}
 		
+		//prepare view
+		tower.prepareView(camera.position.y);
+			
 		renderer.render(scene, camera);
 		rendererBackground.render(sceneBackground, camera);
 		stats.update();
 		requestAnimationFrame(animate);
 	}
-	
 	animate();
+	
 	var addHuman   = function(human){
 		tower.push(human);
 		var tween =  new TWEEN.Tween(tower.position);
 		tween.to({y:tower.height},3000);
 		tween.easing(TWEEN.Easing.Elastic.InOut);
 		tween.start();
-		//tower.position.y+=human.getHeight();
-		
-		
 	}
 	
 	var gotoId = function(id){

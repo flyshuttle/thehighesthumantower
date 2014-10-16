@@ -1,11 +1,17 @@
 Tower = function(){
 	THREE.Object3D.call( this );
 	this.humans = []; 
-	this.activeHumans = [];
+	this.activeHumans  = [];
+	this.visibleIndex  = 0; //index of the 
+	this.topRadius     = 80;
+	this.bottomRadius  = 10;
+	
 	this.maxActiveHumans = 10;
 	this.height = 0;
 	this.spritesheets = [];
 	this.textureSize = 1024;
+	
+	this.autoHide = true;
 	
 	this.init = function(array){
 		var i;
@@ -98,7 +104,7 @@ Tower = function(){
 		
 	}
 	
-	//get the nearest human to certain height
+	//get height at certain index
 	this.getHeightAtIndex = function(index){
 		var height = 0;
 		var i=this.humans.length-1;
@@ -110,13 +116,66 @@ Tower = function(){
 		
 	}
 	
-	
+	//updates active humans
 	this.update = function(ms){
 		var i;
 		for(i in this.activeHumans){
 			this.activeHumans[i].update(ms);
 		}
 		
+	}
+	
+	//show the humans that can bee seen at certain height and hides the rest
+	this.prepareView = function(height){
+		
+		if(this.autoHide==false){
+			return;
+		}
+		
+		//TODO:this can be cached
+		var index  = this.getIndexAtHeight(height);
+		var i;
+		var bottomValidIndex = this.bottomRadius;
+		var topValidIndex    = this.humans.length-this.topRadius-1;
+		//nothing has changed
+		if(index == this.visibleIndex || index==-1){
+			return;
+		}else if(index < this.visibleIndex){
+			
+			//shift the visible humans down
+			for(;this.visibleIndex>index;this.visibleIndex--){
+				if(this.visibleIndex>bottomValidIndex){
+					//this.humans[this.visibleIndex-this.bottomRadius].visible=true;
+					this.add(this.humans[this.visibleIndex-this.bottomRadius]);
+				}
+				if(this.visibleIndex<topValidIndex){
+					//this.humans[this.visibleIndex+this.topRadius].visible=false;
+					this.remove(this.humans[this.visibleIndex+this.topRadius]);
+				}
+			}
+		}else{
+			//shift the visible humans up
+			for(;this.visibleIndex<index;this.visibleIndex++){
+				if(this.visibleIndex>bottomValidIndex)
+					//this.humans[this.visibleIndex-this.bottomRadius].visible=false;
+					this.remove(this.humans[this.visibleIndex-this.bottomRadius]);
+				if(this.visibleIndex<topValidIndex)
+					//this.humans[this.visibleIndex+this.topRadius].visible=true;
+					this.add(this.humans[this.visibleIndex+this.topRadius]);	
+			}
+		}
+	}
+	//remove all humans
+	this.removeAll = function(){
+		for(var i  in this.humans){
+			this.remove(this.humans[i]);
+		}
+	}
+	//adds all humans
+	this.addAll = function(){
+		for(var i  in this.humans){
+			this.add(this.humans[i]);
+		}
 	}
 	
 }
