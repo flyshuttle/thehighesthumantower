@@ -126,7 +126,9 @@
 	
 	//form
 	$('#findbtn').click(formHandler);	
+	$('#findfield').numeric();
 	$('#findform').submit(formHandler);
+	
 	
 	//altimeter
 	var altimeter = $('#altimeter');
