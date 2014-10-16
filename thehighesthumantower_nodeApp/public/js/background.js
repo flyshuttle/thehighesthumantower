@@ -47,26 +47,21 @@ function background(){
 	// Sea
 	this.sea = function (){
 		this.seaMaterial = new THREE.MeshLambertMaterial({color: 0x206ad9,side: THREE.DoubleSide, opacity:0});
-		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(1000000, 1000000, 10, 10), this.seaMaterial );
+		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(100000, 100000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
-		this.sea.position.y = 0;
+		this.sea.position.z = -100;
 		sceneBackground.add(this.sea);
 	};
 
 	// ----------------------------------------------------------------------------------------------
 	// Floor
 	this.floor = function (){
-		var floorTexture = new THREE.ImageUtils.loadTexture('checkerboard.jpg');
-		floorTexture.anisotropy = renderer.getMaxAnisotropy();
-		floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-		floorTexture.repeat.set(10, 10);
-
-		var floor = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000, 10, 10), new THREE.MeshBasicMaterial({
-			map: floorTexture,
-			side: THREE.DoubleSide
-		}));
-		floor.rotation.x = Math.PI / 2;
-		scene.add(floor);
+		
+		this.floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 20, 10, 10),new THREE.MeshLambertMaterial({color: 0xffffff}));
+ 		this.floor.rotation.x = -Math.PI / 2;
+		this.floor.position.y = 9;
+		
+		scene.add(this.floor);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -111,6 +106,7 @@ function background(){
 		this.councilFloorMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.councilFloor = new THREE.Object3D();
 		this.geometryFloorCouncil = null;
+		
 		var manager = new THREE.LoadingManager();
 		manager.onProgress = function ( item, loaded, total ) {
 			console.log( item, loaded, total );
@@ -171,8 +167,8 @@ function background(){
 	// Lights
 	this.lights = function (){
 		// Ambient Light
-		this.ambientLight = new THREE.AmbientLight(0x000044);
-      	scene.add(this.ambientLight);
+		this.ambientLight = new THREE.AmbientLight(0x444444);
+		scene.add(this.ambientLight);
       
 		// Directional lighting
 	    this.directionalLight = new THREE.DirectionalLight(0xffffff);
@@ -183,6 +179,7 @@ function background(){
 	    //this.spotLight = new THREE.DirectionalLight(0xffffff);
 
 	};
+
 
 	// ----------------------------------------------------------------------------------------------
 	// Fog
@@ -236,6 +233,7 @@ function background(){
 	//this.barcelonaFloorCouncil();
 	this.lights();
 	this.sea();
+	this.floor();
 	//this.fog();
 	//this.clouds();
 	// ----------------------------------------------------------------------------------------------

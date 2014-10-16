@@ -17,7 +17,7 @@
 	var camAccel  = 0;
 	var camSpeed  = 0;
 	var camTarget = new THREE.Vector3();
-	var camera = new THREE.PerspectiveCamera(50,1,0.01,2000000);
+	var camera = new THREE.PerspectiveCamera(50,1,0.1,2000000);
 	camera.position.set(0, 0, 400);
 	
 	// Render the city in logarithmicDepthBuffer and tower in a normal renderer
@@ -82,6 +82,7 @@
 	gui.addColor(control, 'directionalLightColor');
 	gui.add(control, 'directionalLightIntensity', 0, 5, 0.1);
 	gui.addColor(control, 'ambientLightColor');
+	gui.add(myBackground.sea.position,'z',-500, 500);
 	
 	var humanGui = gui.addFolder('Human');	 
 	var humanTextureSizeControllertower = humanGui.add(Human,'textureSize',[512,1024,2048]);
@@ -157,10 +158,10 @@
 		camera.position.y+=delta*camSpeed;
 		
 		//crash to the floor
-		if(camera.position.y<0){
+		if(camera.position.y<0.1){
 			camSpeed=(camSpeed<0)?-camSpeed:camSpeed;	
 			camAccel =  0;	
-			camera.position.y=0;
+			camera.position.y=0.1;
 		}
 		
 		//camera tilt
@@ -214,7 +215,6 @@
 	}
 	
 	var keyHandler = function(event){
-		
 		
 		if(event.type=="keyup"){	
 			if((event.keyCode == 38) || (event.keyCode == 40)){
@@ -275,7 +275,7 @@
 	});
 
 	//form
-	function formHandler(){
+	function formHandler(event){
 		event.preventDefault();
 		var fieldValue = parseInt($('#findfield').val());
 		if(!isNaN(fieldValue) && fieldValue>=0 && fieldValue<tower.humans.length){
@@ -287,6 +287,7 @@
 	function loadingProgress(item,loaded, total){
 		$('#loading_label').text((loaded/ total)*100);
 		// when is finish
+		
 		if(loaded==total){
 			$('#splash').fadeOut();
 		}
