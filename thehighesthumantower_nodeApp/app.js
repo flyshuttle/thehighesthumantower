@@ -85,7 +85,7 @@ app.post('/insert-new', function(req, res) {
     console.log("heighPerson:"+heighPerson);
 
     form.parse(req, function(err, fields, files) {
-        var serverPath = './public/captures/images/';
+        
         db.insert({ heighPerson: heighPerson }, function(err, body, header) {
             if (err) {
                 console.log('[db.insert] ', err.message);
@@ -99,9 +99,10 @@ app.post('/insert-new', function(req, res) {
             res.end(JSON.stringify(body));
             console.log(body);
 
+            var serverPath = './public/captures/'+body.id;
             // Create Folder
             var mkdirp = require('mkdirp');
-            mkdirp('./public/capture/'+body.id, function(err) {
+            mkdirp(serverPath, function(err) {
                 if(err){
                     console.log('Error creating folder', err.message);
                     return;
@@ -132,6 +133,7 @@ app.post('/insert-new', function(req, res) {
                             return console.log(err);
                         }
                         console.log('It\'s saved 1024!');
+
                     });
                 }catch(err){
                     console.log(err)
