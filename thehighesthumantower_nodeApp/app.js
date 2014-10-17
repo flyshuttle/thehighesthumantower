@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 
 var formidable = require('formidable');
 var util = require('util');
+var fs = require('fs');
 
 var _ = require("underscore");
 // database in coachDB
@@ -77,7 +78,7 @@ app.get('/tower-json', function(req, res) {
 /* Receive new interaction */
 app.post('/insert-new', function(req, res) {
     // specify the database we are going to use
-    var fs = require('fs');
+    
     var form = new formidable.IncomingForm();
 
     var heighPerson = form.heighPerson;
@@ -110,8 +111,11 @@ app.post('/insert-new', function(req, res) {
                 try{
                     console.log("name:"+file_animation512.name);
                     console.log("path:"+file_animation512.path);
+                    console.log("------------");
                     fs.rename(file_animation512.path, serverPath+file_animation512.name,'utf8', function (err) {
-                        if (err) throw err;
+                        if (err) {
+                            return console.log(err);
+                        }
                         console.log('It\'s saved 512!');
                     });
                 }catch(err){
@@ -122,8 +126,11 @@ app.post('/insert-new', function(req, res) {
                 try{
                     console.log("name:"+file_animation1024.name);
                     console.log("path:"+file_animation1024.path);
+                    console.log("------------");
                     fs.rename(file_animation1024.path, serverPath+file_animation1024.name,'utf8', function (err) {
-                        if (err) throw err;
+                        if (err) {
+                            return console.log(err);
+                        }
                         console.log('It\'s saved 1024!');
                     });
                 }catch(err){
@@ -134,8 +141,11 @@ app.post('/insert-new', function(req, res) {
                 try{
                     console.log("name:"+file_animation2048.name);
                     console.log("path:"+file_animation2048.path);
+                    console.log("------------");
                     fs.rename(file_animation2048.path, serverPath+file_animation2048.name,'utf8', function (err) {
-                        if (err) throw err;
+                        if (err) {
+                            return console.log(err);
+                        }
                         console.log('It\'s saved 2048!');
                     });
                 }catch(err){
