@@ -13,8 +13,8 @@ var bodyParser = require('body-parser');
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
-var mv = require('mv');
 
+var convert = require('netpbm').convert;
 var _ = require("underscore");
 // database in coachDB
 var nano = require('nano')('http://localhost:5984');
@@ -34,7 +34,7 @@ var io = null;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-server = require('http').createServer(app)
+server = require('http').createServer(app);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -93,25 +93,47 @@ app.post('/insert-new', function(req, res) {
                 return;
             }
           
-            
             // Upload to internet
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify(body));
             console.log(body);
 
-            var serverPath = __dirname +'/public/img/people/';
+            var serverPath = __dirname +'/public/img/';
             console.log(serverPath);
             // Create Folder
-            var mkdirp = require('mkdirp');
-            mkdirp(serverPath, function(err) {
-                if(err){
-                    console.log('Error creating folder', err.message);
-                    return;
-                }
+            // Single512
+                
+                var file_single512 = files.single512;
+                convert(file_single512.path, serverPath+'single/512/'+file_single512.name.replace(".png", ".jpg"), {},
+                  function(err) {
+                    if (!err) {
+                      console.log("Your 512 image is ready!");
+                    }
+                  }
+                );
+                // Single1024
+                var file_single1024 = files.animation1024;
+                convert(file_single1024.path, serverPath+'single/1024/'+file_single1024.name.replace(".png", ".jpg"), {},
+                  function(err) {
+                    if (!err) {
+                      console.log("Your 1024 image is ready!");
+                    }
+                  }
+                );
+                // Single2048
+                var file_single2048 = files.single2048;
+                convert(file_single2048.path, serverPath+'single/2048/'+file_single512.name.replace(".png", ".jpg"), {},
+                  function(err) {
+                    if (!err) {
+                      console.log("Your 2048 image is ready!");
+                    }
+                  }
+                );
+                // --------------------------------------------------
                 // Animation512
-                var convert = require('netpbm').convert;
+                
                 var file_animation512 = files.animation512;
-                convert(file_animation512.path, serverPath+'/512/'+file_animation512.name.replace(".png", ".jpg"), {},
+                convert(file_animation512.path, serverPath+'people/512/'+file_animation512.name.replace(".png", ".jpg"), {},
                   function(err) {
                     if (!err) {
                       console.log("Your 512 image is ready!");
@@ -120,7 +142,7 @@ app.post('/insert-new', function(req, res) {
                 );
                 // Animation1024
                 var file_animation1024 = files.animation1024;
-                convert(file_animation1024.path, serverPath+'/1024/'+file_animation1024.name.replace(".png", ".jpg"), {},
+                convert(file_animation1024.path, serverPath+'people/1024/'+file_animation1024.name.replace(".png", ".jpg"), {},
                   function(err) {
                     if (!err) {
                       console.log("Your 1024 image is ready!");
@@ -129,7 +151,7 @@ app.post('/insert-new', function(req, res) {
                 );
                 // Animation2048
                 var file_animation2048 = files.animation2048;
-                convert(file_animation2048.path, serverPath+'/2048/'+file_animation512.name.replace(".png", ".jpg"), {},
+                convert(file_animation2048.path, serverPath+'people/2048/'+file_animation512.name.replace(".png", ".jpg"), {},
                   function(err) {
                     if (!err) {
                       console.log("Your 2048 image is ready!");
@@ -138,7 +160,7 @@ app.post('/insert-new', function(req, res) {
                 );
                 // Give information
                 io.sockets.emit('new-human',{id:body.id,heighPerson:heighPerson});
-            });
+            //});
             
         });
     });
