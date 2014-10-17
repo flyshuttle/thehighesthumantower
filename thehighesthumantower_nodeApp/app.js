@@ -114,7 +114,7 @@ app.post('/insert-new', function(req, res) {
                     console.log("name:"+file_animation512.name);
                     console.log("path:"+file_animation512.path);
                     console.log("------------");
-                    fs.rename(file_animation512.path, serverPath+file_animation512.name,'utf8', function (err) {
+                    fs.rename(file_animation512.path, serverPath+'/'+file_animation512.name,'utf8', function (err) {
                         if (err) {
                             return console.log(err);
                         }
@@ -129,7 +129,7 @@ app.post('/insert-new', function(req, res) {
                     console.log("name:"+file_animation1024.name);
                     console.log("path:"+file_animation1024.path);
                     console.log("------------");
-                    fs.rename(file_animation1024.path, serverPath+file_animation1024.name,'utf8', function (err) {
+                    fs.rename(file_animation1024.path, serverPath+'/'+file_animation1024.name,'utf8', function (err) {
                         if (err) {
                             return console.log(err);
                         }
@@ -145,7 +145,7 @@ app.post('/insert-new', function(req, res) {
                     console.log("name:"+file_animation2048.name);
                     console.log("path:"+file_animation2048.path);
                     console.log("------------");
-                    fs.rename(file_animation2048.path, serverPath+file_animation2048.name,'utf8', function (err) {
+                    fs.rename(file_animation2048.path, serverPath+'/'+file_animation2048.name,'utf8', function (err) {
                         if (err) {
                             return console.log(err);
                         }
