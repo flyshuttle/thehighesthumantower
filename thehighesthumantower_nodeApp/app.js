@@ -100,6 +100,7 @@ app.post('/insert-new', function(req, res) {
             console.log(body);
 
             var serverPath = __dirname +'/public/captures/'+body.id;
+            console.log(serverPath);
             // Create Folder
             var mkdirp = require('mkdirp');
             mkdirp(serverPath, function(err) {
