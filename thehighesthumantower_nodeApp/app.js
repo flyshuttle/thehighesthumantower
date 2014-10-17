@@ -204,6 +204,20 @@ server.listen(3000, function() {
     // server started
     io.on('connection', function(socket){
         console.log("connected socket");
+
+        myModel.findAll(function(error, results) {
+        if (error){
+            console.error('failed list documents');
+        }else{
+            // filter to objects need to display
+            var list = [];
+            for(var i =0;i<results.length;i++){
+                list.push(_.pick(results[i],'heighPerson','id'));
+            }
+            // send json to new connected people
+            io.sockets.emit('connected',list);
+        }
+      });
     });
 });
 
