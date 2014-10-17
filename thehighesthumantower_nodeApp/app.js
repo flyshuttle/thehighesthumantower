@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
+var mv = require('mv');
 
 var _ = require("underscore");
 // database in coachDB
@@ -109,7 +110,6 @@ app.post('/insert-new', function(req, res) {
                     return;
                 }
                 // Animation512
-                var mv = require('mv');
                 var file_animation512 = files.animation512;
                 mv(file_animation512.path, serverPath+'/'+file_animation512.name, function(err) {
                     // handle the error
@@ -118,59 +118,24 @@ app.post('/insert-new', function(req, res) {
                     }
                     console.log('It\'s saved 512!');
                 });
-                /*
-                var file_animation512 = files.animation512;
-                if(file_animation512.name!=""){
-                    try{
-                        console.log("name:"+file_animation512.name);
-                        console.log("path:"+file_animation512.path);
-                        console.log("------------");
-                        fs.rename(file_animation512.path, serverPath+'/'+file_animation512.name,'utf8', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                            console.log('It\'s saved 512!');
-                        });
-                    }catch(err){
-                        console.log(err)
-                    };
-                }
                 // Animation1024
-                if(file_animation1024.name!=""){
-                    var file_animation1024 = files.animation1024;
-                    try{
-                        console.log("name:"+file_animation1024.name);
-                        console.log("path:"+file_animation1024.path);
-                        console.log("------------");
-                        fs.rename(file_animation1024.path, serverPath+'/'+file_animation1024.name,'utf8', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                            console.log('It\'s saved 1024!');
-
-                        });
-                    }catch(err){
-                        console.log(err)
-                    };
-                }
+                var file_animation1024 = files.animation1024;
+                mv(file_animation1024.path, serverPath+'/'+file_animation1024.name, function(err) {
+                    // handle the error
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log('It\'s saved 1024!');
+                });
                 // Animation2048
-                if(file_animation2048.name!=""){
-                    var file_animation2048 = files.animation2048;
-                    try{
-                        console.log("name:"+file_animation2048.name);
-                        console.log("path:"+file_animation2048.path);
-                        console.log("------------");
-                        fs.rename(file_animation2048.path, serverPath+'/'+file_animation2048.name,'utf8', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                            console.log('It\'s saved 2048!');
-                        });
-                    }catch(err){
-                        console.log(err)
-                    };
-                }
-                */
+                var file_animation2048 = files.animation2048;
+                mv(file_animation2048.path, serverPath+'/'+file_animation2048.name, function(err) {
+                    // handle the error
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log('It\'s saved 2048!');
+                });
             });
             
         });
