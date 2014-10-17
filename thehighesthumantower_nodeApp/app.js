@@ -93,14 +93,13 @@ app.post('/insert-new', function(req, res) {
                 return;
             }
           
-            // Give information
-            io.sockets.emit('new-human',{id:'1231312',heighPerson:123});
+            
             // Upload to internet
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify(body));
             console.log(body);
 
-            var serverPath = __dirname +'/public/captures/'+body.id;
+            var serverPath = __dirname +'/public/img/people/';
             console.log(serverPath);
             // Create Folder
             var mkdirp = require('mkdirp');
@@ -112,42 +111,33 @@ app.post('/insert-new', function(req, res) {
                 // Animation512
                 var convert = require('netpbm').convert;
                 var file_animation512 = files.animation512;
-                convert(file_animation512.path, serverPath+'/'+file_animation512.name.replace(".png", ".jpg"), 
-                  {},
+                convert(file_animation512.path, serverPath+'/512/'+file_animation512.name.replace(".png", ".jpg"), {},
                   function(err) {
                     if (!err) {
                       console.log("Your 512 image is ready!");
                     }
                   }
                 );
-                /*
-                
-                mv(file_animation512.path, serverPath+'/'+file_animation512.name, function(err) {
-                    // handle the error
-                    if (err) {
-                        return console.log(err);
-                    }
-                    console.log('It\'s saved 512!');
-                });
                 // Animation1024
                 var file_animation1024 = files.animation1024;
-                mv(file_animation1024.path, serverPath+'/'+file_animation1024.name, function(err) {
-                    // handle the error
-                    if (err) {
-                        return console.log(err);
+                convert(file_animation1024.path, serverPath+'/1024/'+file_animation1024.name.replace(".png", ".jpg"), {},
+                  function(err) {
+                    if (!err) {
+                      console.log("Your 1024 image is ready!");
                     }
-                    console.log('It\'s saved 1024!');
-                });
+                  }
+                );
                 // Animation2048
                 var file_animation2048 = files.animation2048;
-                mv(file_animation2048.path, serverPath+'/'+file_animation2048.name, function(err) {
-                    // handle the error
-                    if (err) {
-                        return console.log(err);
+                convert(file_animation2048.path, serverPath+'/2048/'+file_animation512.name.replace(".png", ".jpg"), {},
+                  function(err) {
+                    if (!err) {
+                      console.log("Your 2048 image is ready!");
                     }
-                    console.log('It\'s saved 2048!');
-                });
-                */
+                  }
+                );
+                // Give information
+                io.sockets.emit('new-human',{id:body.id,heighPerson:heighPerson});
             });
             
         });

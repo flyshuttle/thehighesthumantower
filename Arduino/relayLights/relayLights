@@ -1,0 +1,25 @@
+
+int led = 2;
+char action = 'c';
+
+// the setup routine runs once when you press reset:
+void setup() {                
+  // initialize the digital pin as an output.
+  pinMode(led, OUTPUT);   
+  digitalWrite(led, LOW);  
+  Serial.begin(9600);
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+	if (Serial.available() > 0) {
+        action = Serial.read();
+
+        if(action =='c'){
+    		digitalWrite(led, LOW);
+	    }else{
+	  		digitalWrite(led, HIGH); 
+	    }
+    }
+
+}

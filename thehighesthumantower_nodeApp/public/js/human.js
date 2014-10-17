@@ -34,7 +34,6 @@ Human.prototype.update = function(delta){
 	}
 }
 
-
 Human.prototype.onLoad = function(image){
 	
 	console.log("loaded");
