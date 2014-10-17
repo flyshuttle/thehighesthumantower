@@ -8,7 +8,18 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+
+var formidable = require('formidable');
+var util = require('util');
+
+var _ = require("underscore");
+// database in coachDB
+var nano = require('nano')('http://localhost:5984');
+var db = nano.use('thehighesthumantower');
+
+var couchDBModel = require('couchdb-model');
+var myModel = couchDBModel(db);
 
 var app = express(); // bring app to anyfile
 var server = require('http').createServer(app);
@@ -44,6 +55,68 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
 
 app.use('/', routes);
 app.use('/users', users);
+
+/* Export json */
+app.get('/tower-json', function(req, res) {
+  myModel.findAll(function(error, results) {
+    if (error){
+        console.error('failed list documents');
+    }else{
+        // filter to objects need to display
+        var list = [];
+        for(var i =0;i<results.length;i++){
+            list.push(_.pick(results[i],'heighPerson'));
+        }
+        // return request as json 
+        res.setHeader('Content-Type','application/json');
+        res.end(JSON.stringify(list));
+    }
+  });
+});
+
+/* Receive new interaction */
+app.post('/insert-new', function(req, res) {
+    // specify the database we are going to use
+    var fs = require('fs');
+    var heighPerson = req.body.heighPerson;
+    console.log(heighPerson);
+    console.log(req.body);
+
+    var form = new formidable.IncomingForm();
+
+    form.parse(req, function(err, fields, files) {
+        fs.writeFile(files.upload.name, files.upload,'utf8', function (err) {
+            if (err) throw err;
+            console.log('It\'s saved!');
+        });
+
+        res.writeHead(200, {'content-type': 'text/plain'});
+        res.write('received upload:\n\n');
+        res.end(util.inspect({fields: fields, files: files}));
+    });
+
+    // save image
+    /*
+    fs.writeFile('newImage', req.files.image, function (err) {
+        if (err) throw err;
+        console.log("It's saved");
+    });
+    */
+    db.insert({ heighPerson: heighPerson }, function(err, body, header) {
+      if (err) {
+        console.log('[db.insert] ', err.message);
+        return;
+      }
+      
+      // Give information
+      io.sockets.emit('new-human',{id:'1231312',heighPerson:123});
+      // upload to internet
+      res.setHeader('Content-Type','application/json');
+      res.end(JSON.stringify(body));
+
+      console.log(body);
+    });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
