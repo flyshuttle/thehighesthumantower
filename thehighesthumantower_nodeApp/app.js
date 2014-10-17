@@ -109,6 +109,16 @@ app.post('/insert-new', function(req, res) {
                     return;
                 }
                 // Animation512
+                var mv = require('mv');
+
+                mv(file_animation512.path, serverPath+'/'+file_animation512.name, function(err) {
+                    // handle the error
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log('It\'s saved 512!');
+                });
+                /*
                 var file_animation512 = files.animation512;
                 if(file_animation512.name!=""){
                     try{
@@ -160,6 +170,7 @@ app.post('/insert-new', function(req, res) {
                         console.log(err)
                     };
                 }
+                */
             });
             
         });
