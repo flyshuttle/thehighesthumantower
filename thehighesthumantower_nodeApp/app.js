@@ -110,6 +110,7 @@ app.post('/insert-new', function(req, res) {
                     return;
                 }
                 // Animation512
+                var file_animation512 = files.animation512;
                 convert(file_animation512.path, serverPath+'/'+file_animation512.name.replace(".png", ".jpg"), 
                   {},
                   function(err) {
@@ -119,7 +120,7 @@ app.post('/insert-new', function(req, res) {
                   }
                 );
                 /*
-                var file_animation512 = files.animation512;
+                
                 mv(file_animation512.path, serverPath+'/'+file_animation512.name, function(err) {
                     // handle the error
                     if (err) {
