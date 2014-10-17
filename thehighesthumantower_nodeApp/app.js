@@ -110,6 +110,15 @@ app.post('/insert-new', function(req, res) {
                     return;
                 }
                 // Animation512
+                convert(file_animation512.path, serverPath+'/'+file_animation512.name.replace(".png", ".jpg"), 
+                  {},
+                  function(err) {
+                    if (!err) {
+                      console.log("Your 512 image is ready!");
+                    }
+                  }
+                );
+                /*
                 var file_animation512 = files.animation512;
                 mv(file_animation512.path, serverPath+'/'+file_animation512.name, function(err) {
                     // handle the error
@@ -136,6 +145,7 @@ app.post('/insert-new', function(req, res) {
                     }
                     console.log('It\'s saved 2048!');
                 });
+                */
             });
             
         });
