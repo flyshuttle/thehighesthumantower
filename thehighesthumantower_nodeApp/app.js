@@ -110,50 +110,56 @@ app.post('/insert-new', function(req, res) {
                 }
                 // Animation512
                 var file_animation512 = files.animation512;
-                try{
-                    console.log("name:"+file_animation512.name);
-                    console.log("path:"+file_animation512.path);
-                    console.log("------------");
-                    fs.rename(file_animation512.path, serverPath+'/'+file_animation512.name,'utf8', function (err) {
-                        if (err) {
-                            return console.log(err);
-                        }
-                        console.log('It\'s saved 512!');
-                    });
-                }catch(err){
-                    console.log(err)
-                };
+                if(file_animation512.name!=""){
+                    try{
+                        console.log("name:"+file_animation512.name);
+                        console.log("path:"+file_animation512.path);
+                        console.log("------------");
+                        fs.rename(file_animation512.path, serverPath+'/'+file_animation512.name,'utf8', function (err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                            console.log('It\'s saved 512!');
+                        });
+                    }catch(err){
+                        console.log(err)
+                    };
+                }
                 // Animation1024
-                var file_animation1024 = files.animation1024;
-                try{
-                    console.log("name:"+file_animation1024.name);
-                    console.log("path:"+file_animation1024.path);
-                    console.log("------------");
-                    fs.rename(file_animation1024.path, serverPath+'/'+file_animation1024.name,'utf8', function (err) {
-                        if (err) {
-                            return console.log(err);
-                        }
-                        console.log('It\'s saved 1024!');
+                if(file_animation1024.name!=""){
+                    var file_animation1024 = files.animation1024;
+                    try{
+                        console.log("name:"+file_animation1024.name);
+                        console.log("path:"+file_animation1024.path);
+                        console.log("------------");
+                        fs.rename(file_animation1024.path, serverPath+'/'+file_animation1024.name,'utf8', function (err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                            console.log('It\'s saved 1024!');
 
-                    });
-                }catch(err){
-                    console.log(err)
-                };
+                        });
+                    }catch(err){
+                        console.log(err)
+                    };
+                }
                 // Animation2048
-                var file_animation2048 = files.animation2048;
-                try{
-                    console.log("name:"+file_animation2048.name);
-                    console.log("path:"+file_animation2048.path);
-                    console.log("------------");
-                    fs.rename(file_animation2048.path, serverPath+'/'+file_animation2048.name,'utf8', function (err) {
-                        if (err) {
-                            return console.log(err);
-                        }
-                        console.log('It\'s saved 2048!');
-                    });
-                }catch(err){
-                    console.log(err)
-                };
+                if(file_animation2048.name!=""){
+                    var file_animation2048 = files.animation2048;
+                    try{
+                        console.log("name:"+file_animation2048.name);
+                        console.log("path:"+file_animation2048.path);
+                        console.log("------------");
+                        fs.rename(file_animation2048.path, serverPath+'/'+file_animation2048.name,'utf8', function (err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+                            console.log('It\'s saved 2048!');
+                        });
+                    }catch(err){
+                        console.log(err)
+                    };
+                }
             });
             
         });
