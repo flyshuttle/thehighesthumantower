@@ -110,7 +110,7 @@ app.post('/insert-new', function(req, res) {
                 }
                 // Animation512
                 var mv = require('mv');
-
+                var file_animation512 = files.animation512;
                 mv(file_animation512.path, serverPath+'/'+file_animation512.name, function(err) {
                     // handle the error
                     if (err) {
