@@ -97,11 +97,12 @@ app.post('/insert-new', function(req, res) {
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify(body));
             console.log(body);
+
             // Create Folder
             var mkdirp = require('mkdirp');
-            mkdirp('./public/', function(err) {
+            mkdirp('./public/capture/'+body.id, function(err) {
                 if(err){
-                    console.log('Create folder', err.message);
+                    console.log('Error creating folder', err.message);
                     return;
                 }
                 // Animation512
@@ -111,7 +112,7 @@ app.post('/insert-new', function(req, res) {
                     console.log("path:"+file_animation512.path);
                     fs.rename(file_animation512.path, serverPath+file_animation512.name,'utf8', function (err) {
                         if (err) throw err;
-                        console.log('It\'s saved!');
+                        console.log('It\'s saved 512!');
                     });
                 }catch(err){
                     console.log(err)
@@ -123,7 +124,7 @@ app.post('/insert-new', function(req, res) {
                     console.log("path:"+file_animation1024.path);
                     fs.rename(file_animation1024.path, serverPath+file_animation1024.name,'utf8', function (err) {
                         if (err) throw err;
-                        console.log('It\'s saved!');
+                        console.log('It\'s saved 1024!');
                     });
                 }catch(err){
                     console.log(err)
@@ -135,12 +136,13 @@ app.post('/insert-new', function(req, res) {
                     console.log("path:"+file_animation2048.path);
                     fs.rename(file_animation2048.path, serverPath+file_animation2048.name,'utf8', function (err) {
                         if (err) throw err;
-                        console.log('It\'s saved!');
+                        console.log('It\'s saved 2048!');
                     });
                 }catch(err){
                     console.log(err)
                 };
             });
+            
         });
     });
 });
