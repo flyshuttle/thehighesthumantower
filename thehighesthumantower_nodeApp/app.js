@@ -85,64 +85,63 @@ app.post('/insert-new', function(req, res) {
 
     form.parse(req, function(err, fields, files) {
         var serverPath = './public/captures/images/';
-
-        // animation512
-        var file_animation512 = files.animation512;
-        try{
-            console.log("name:"+file_animation512.name);
-            console.log("path:"+file_animation512.path);
-            fs.rename(file_animation512.path, serverPath+file_animation512.name,'utf8', function (err) {
-                if (err) throw err;
-                console.log('It\'s saved!');
-                /*res.send({
-                    path: serverPath
-                });*/
+        db.insert({ heighPerson: heighPerson }, function(err, body, header) {
+            if (err) {
+                console.log('[db.insert] ', err.message);
+                return;
+            }
+          
+            // Give information
+            io.sockets.emit('new-human',{id:'1231312',heighPerson:123});
+            // Upload to internet
+            res.setHeader('Content-Type','application/json');
+            res.end(JSON.stringify(body));
+            console.log(body);
+            // Create Folder
+            var mkdirp = require('mkdirp');
+            mkdirp('./public/', function(err) {
+                if(err){
+                    console.log('Create folder', err.message);
+                    return;
+                }
+                // Animation512
+                var file_animation512 = files.animation512;
+                try{
+                    console.log("name:"+file_animation512.name);
+                    console.log("path:"+file_animation512.path);
+                    fs.rename(file_animation512.path, serverPath+file_animation512.name,'utf8', function (err) {
+                        if (err) throw err;
+                        console.log('It\'s saved!');
+                    });
+                }catch(err){
+                    console.log(err)
+                };
+                // Animation1024
+                var file_animation1024 = files.animation1024;
+                try{
+                    console.log("name:"+file_animation1024.name);
+                    console.log("path:"+file_animation1024.path);
+                    fs.rename(file_animation1024.path, serverPath+file_animation1024.name,'utf8', function (err) {
+                        if (err) throw err;
+                        console.log('It\'s saved!');
+                    });
+                }catch(err){
+                    console.log(err)
+                };
+                // Animation2048
+                var file_animation2048 = files.animation2048;
+                try{
+                    console.log("name:"+file_animation2048.name);
+                    console.log("path:"+file_animation2048.path);
+                    fs.rename(file_animation2048.path, serverPath+file_animation2048.name,'utf8', function (err) {
+                        if (err) throw err;
+                        console.log('It\'s saved!');
+                    });
+                }catch(err){
+                    console.log(err)
+                };
             });
-        }catch(err){
-            console.log(err)
-        };
-        // animation1024
-        var file_animation1024 = files.animation1024;
-        try{
-            console.log("name:"+file_animation1024.name);
-            console.log("path:"+file_animation1024.path);
-            fs.rename(file_animation1024.path, serverPath+file_animation1024.name,'utf8', function (err) {
-                if (err) throw err;
-                console.log('It\'s saved!');
-                /*res.send({
-                    path: serverPath
-                });*/
-            });
-        }catch(err){
-            console.log(err)
-        };
-
-        /*
-        res.writeHead(200, {'content-type': 'text/plain'});
-        res.write('received upload:\n\n');
-        res.end(util.inspect({fields: fields, files: files}));
-        */
-    });
-
-    // save image
-    /*
-    fs.writeFile('newImage', req.files.image, function (err) {
-        if (err) throw err;
-        console.log("It's saved");
-    });
-    */
-    db.insert({ heighPerson: heighPerson }, function(err, body, header) {
-      if (err) {
-        console.log('[db.insert] ', err.message);
-        return;
-      }
-      
-      // Give information
-      io.sockets.emit('new-human',{id:'1231312',heighPerson:123});
-      // upload to internet
-      res.setHeader('Content-Type','application/json');
-      res.end(JSON.stringify(body));
-      console.log(body);
+        });
     });
 });
 
