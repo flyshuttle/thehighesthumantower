@@ -153,6 +153,11 @@
 		//camera speed
 		var delta = clock.getDelta(); 
 		tower.update(delta);
+		//pinya update 
+		myBackground.pinyaFrontMaterial.update(delta);
+		myBackground.pinyaBackMaterial.update(delta);
+		
+		
 		camSpeed+=camAccel;	
 		camSpeed*=0.99;
 		camera.position.y+=delta*camSpeed;
@@ -182,7 +187,9 @@
 		
 		//prepare view
 		tower.prepareView(camera.position.y);
-			
+		
+		
+		
 		renderer.render(scene, camera);
 		rendererBackground.render(sceneBackground, camera);
 		stats.update();

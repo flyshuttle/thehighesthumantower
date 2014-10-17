@@ -60,8 +60,27 @@ function background(){
 		this.floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 20, 10, 10),new THREE.MeshLambertMaterial({color: 0xffffff}));
  		this.floor.rotation.x = -Math.PI / 2;
 		this.floor.position.y = 9;
-		
 		scene.add(this.floor);
+		
+		var texture = new THREE.ImageUtils.loadTexture('img/pinya/front2048.jpg')
+		this.pinyaFrontMaterial = new SpriteSheetMaterial(texture,1,1,4,4,16,6,1);
+		var front = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.5, 1, 1), this.pinyaFrontMaterial); 
+		front.position.z = 0.2;
+		
+		var texture = new THREE.ImageUtils.loadTexture('img/pinya/back2048.jpg')
+		this.pinyaBackMaterial = new SpriteSheetMaterial(texture,1,1,4,4,16,6,1);
+		var back = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 2.0, 1, 1), this.pinyaBackMaterial); 
+		back.position.z = -0.3;
+		
+		this.pinya = new THREE.Object3D();
+		this.pinya.add(front);
+		this.pinya.add(back);
+	
+		this.pinya.position.y=9.6;
+		this.pinya.position.z=0.2;
+		
+		scene.add(this.pinya);
+		
 	};
 
 	// ----------------------------------------------------------------------------------------------
