@@ -1,0 +1,19 @@
+{
+  "name": "highest human tower  led screens",
+  "description": "Devart project app by Mar Canet & Varvara Guljajeva.",
+  "manifest_version": 2,
+  "version": "0.2",
+  "permissions": [
+//    "alwaysOnTopWindows",
+    "http://*/",
+    "https://*/"
+  ],
+  "icons": {
+    "128": "img/icon-128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  }
+}

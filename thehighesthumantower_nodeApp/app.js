@@ -78,21 +78,50 @@ app.get('/tower-json', function(req, res) {
 app.post('/insert-new', function(req, res) {
     // specify the database we are going to use
     var fs = require('fs');
-    var heighPerson = req.body.heighPerson;
-    console.log(heighPerson);
-    console.log(req.body);
-
     var form = new formidable.IncomingForm();
 
-    form.parse(req, function(err, fields, files) {
-        fs.writeFile(files.upload.name, files.upload,'utf8', function (err) {
-            if (err) throw err;
-            console.log('It\'s saved!');
-        });
+    var heighPerson = form.heighPerson;
+    console.log("heighPerson:"+heighPerson);
 
+    form.parse(req, function(err, fields, files) {
+        var serverPath = './public/captures/images/';
+
+        // animation512
+        var file_animation512 = files.animation512;
+        try{
+            console.log("name:"+file_animation512.name);
+            console.log("path:"+file_animation512.path);
+            fs.rename(file_animation512.path, serverPath+file_animation512.name,'utf8', function (err) {
+                if (err) throw err;
+                console.log('It\'s saved!');
+                /*res.send({
+                    path: serverPath
+                });*/
+            });
+        }catch(err){
+            console.log(err)
+        };
+        // animation1024
+        var file_animation1024 = files.animation1024;
+        try{
+            console.log("name:"+file_animation1024.name);
+            console.log("path:"+file_animation1024.path);
+            fs.rename(file_animation1024.path, serverPath+file_animation1024.name,'utf8', function (err) {
+                if (err) throw err;
+                console.log('It\'s saved!');
+                /*res.send({
+                    path: serverPath
+                });*/
+            });
+        }catch(err){
+            console.log(err)
+        };
+
+        /*
         res.writeHead(200, {'content-type': 'text/plain'});
         res.write('received upload:\n\n');
         res.end(util.inspect({fields: fields, files: files}));
+        */
     });
 
     // save image
@@ -113,7 +142,6 @@ app.post('/insert-new', function(req, res) {
       // upload to internet
       res.setHeader('Content-Type','application/json');
       res.end(JSON.stringify(body));
-
       console.log(body);
     });
 });
