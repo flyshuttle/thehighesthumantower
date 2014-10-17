@@ -110,6 +110,7 @@ app.post('/insert-new', function(req, res) {
                     return;
                 }
                 // Animation512
+                var convert = require('netpbm').convert;
                 var file_animation512 = files.animation512;
                 convert(file_animation512.path, serverPath+'/'+file_animation512.name.replace(".png", ".jpg"), 
                   {},
