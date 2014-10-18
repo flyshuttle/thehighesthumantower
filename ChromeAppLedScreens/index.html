@@ -15,14 +15,9 @@
 				background-color: #fff;
 				margin: 0px;
 				overflow: hidden;
+				padding:0px;
 				width: 100%;
 				height: 100%;
-			}
-
-			#info {
-				position: absolute;
-				top: 0px; width: 100%;
-				padding: 5px;
 			}
 
 			#container1, #container2, #container3, #container4, #container5, #container6, #container7 {
@@ -57,19 +52,29 @@
 			a{
 				color: #0080ff;
 			}
+			#led{
+				width:1120px;
+				height: 640px;
+				position: absolute;
+				left:0px;
+				top:0px;
+				padding:0px;
+				margin:0px;
+			}
 
 		</style>
 	</head>
 	<body>
-		<div id="centerer">
-			<div id="container1"></div>
-			<div id="container2"></div>
-			<div id="container3"></div>
-			<div id="container4"></div>
-			<div id="container5"></div>
-			<div id="container6"></div>
-			<div id="container7"></div>
-		</div>
-
+		<!--
+		<div id="container1"></div>
+		<div id="container2"></div>
+		<div id="container3"></div>
+		<div id="container4"></div>
+		<div id="container5"></div>
+		<div id="container6"></div>
+		<div id="container7"></div>
+		-->
+		<webview id="led" src="http://localhost:3000/ledscreen.html"></webview>
+		
 	</body>
 </html>

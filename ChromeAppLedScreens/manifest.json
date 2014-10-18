@@ -6,7 +6,8 @@
   "permissions": [
 //    "alwaysOnTopWindows",
     "http://*/",
-    "https://*/"
+    "https://*/",
+    "webview"
   ],
   "icons": {
     "128": "img/icon-128.png"
