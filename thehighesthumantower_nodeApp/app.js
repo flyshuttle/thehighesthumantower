@@ -44,12 +44,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-var engines = require('consolidate');
-app.set('views', __dirname + '/views');
-app.engine('html', engines.mustache);
-app.set('view engine', 'html');
+app.engine('html', require('ejs').renderFile);
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -60,7 +55,7 @@ app.use(bodyParser.json())
 // parse application/vnd.api+json as json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
 
-app.use('/', routes);
+//app.use('/', routes);
 app.use('/users', users);
 
 /* Export json */
