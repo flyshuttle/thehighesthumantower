@@ -44,7 +44,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('C:\\thehighesthumantower_contents'));
+
+
+var engines = require('consolidate');
+app.set('views', __dirname + '/views');
+app.engine('html', engines.mustache);
+app.set('view engine', 'html');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -74,6 +79,10 @@ app.get('/tower-json', function(req, res) {
         res.end(JSON.stringify(list));
     }
   });
+});
+
+app.get('/form', function(req, res) {
+  res.render('form.html');
 });
 
 /* Receive new interaction */
