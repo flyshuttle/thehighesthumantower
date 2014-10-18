@@ -2,7 +2,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
   appwindow = chrome.app.window.create("index.html",
     {  frame: "none",
        id: "highesthumantower-ledsScreens",
-       /*alwaysOnTop:true,*/
+       alwaysOnTop:true,
        minWidth:1120,
        minHeight: 640,
        left:0,

@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "version": "0.2",
   "permissions": [
-//    "alwaysOnTopWindows",
+   "alwaysOnTopWindows",
     "http://*/",
     "https://*/",
     "webview"
