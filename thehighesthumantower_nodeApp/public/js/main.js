@@ -40,6 +40,14 @@
 			tower.init(data);
 			tower.position.y=tower.height;
 		});
+
+	// detect if is mobile platform
+	var md = new MobileDetect(window.navigator.userAgent);
+	if(md.mobile()){
+
+	}else{
+
+	}
 	
 	// stats
 	stats = new Stats();
