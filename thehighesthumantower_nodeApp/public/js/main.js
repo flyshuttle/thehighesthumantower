@@ -6,7 +6,7 @@
 	var tower = new Tower();
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
-	var tiltAngle = 60;
+	var tiltAngle = 20;
 	var activationSpeed = 150; //when camSpeed < activationSpeed star activating humans
 	var activationEnabled = true; //camera moving to an id
 	
@@ -40,9 +40,6 @@
 			tower.init(data);
 			tower.position.y=tower.height;
 		});
-	
-	//lookAtPos.copy( humans[humanIndex].position);
-	//camera.lookAt(new THREE.Vector3());
 	
 	// stats
 	stats = new Stats();
@@ -134,6 +131,7 @@
 	//altimeter
 	var altimeter = $('#altimeter');
 	
+		
 	
 	// animate
 	var animate = function () {
@@ -156,6 +154,7 @@
 		//pinya update 
 		myBackground.pinyaFrontMaterial.update(delta);
 		myBackground.pinyaBackMaterial.update(delta);
+		
 		
 		
 		camSpeed+=camAccel;	
@@ -195,7 +194,7 @@
 		stats.update();
 		requestAnimationFrame(animate);
 	}
-	animate();
+	
 	
 	var addHuman   = function(human){
 		tower.push(human);
@@ -290,12 +289,19 @@
 		}
 	}
 	
-	// loading 
+	//loading 
+	THREE.DefaultLoadingManager.onProgress = loadingProgress;
+	
+	
 	function loadingProgress(item,loaded, total){
-		$('#loading_label').text((loaded/ total)*100);
-		// when is finish
 		
+		console.log(item+","+loaded+","+total);
+		
+		$('#loading_label').text(Math.floor((loaded/ total)*100));
+		// when ends loading
 		if(loaded==total){
+			//start rendering when everything is loaded
+			animate();
 			$('#splash').fadeOut();
 		}
 	}

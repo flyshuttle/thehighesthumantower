@@ -1,4 +1,8 @@
-function background(){
+function background(_scene,_sceneBackground){
+	
+	this.scene = _scene !== undefined ? _scene:scene
+	this.sceneBackground = _sceneBackground !== undefined ? _sceneBackground:sceneBackground;
+	
 	this.texture = new THREE.Texture();
 	this.imageLoader = towerImageLoader;
 
@@ -34,7 +38,7 @@ function background(){
 		}
 		var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 		var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-		scene.add( skyBox );
+		this.scene.add( skyBox );
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -50,7 +54,7 @@ function background(){
 		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(100000, 100000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
 		this.sea.position.z = -100;
-		sceneBackground.add(this.sea);
+		this.sceneBackground.add(this.sea);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -60,7 +64,7 @@ function background(){
 		this.floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 20, 10, 10),new THREE.MeshLambertMaterial({color: 0xffffff}));
  		this.floor.rotation.x = -Math.PI / 2;
 		this.floor.position.y = 9;
-		scene.add(this.floor);
+		this.scene.add(this.floor);
 		
 		var texture = new THREE.ImageUtils.loadTexture('img/pinya/front2048.jpg')
 		this.pinyaFrontMaterial = new SpriteSheetMaterial(texture,1,1,4,4,16,6,1);
@@ -79,7 +83,7 @@ function background(){
 		this.pinya.position.y=9.6;
 		this.pinya.position.z=0.2;
 		
-		scene.add(this.pinya);
+		this.scene.add(this.pinya);
 		
 	};
 
@@ -91,13 +95,8 @@ function background(){
 		this.buildingMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.councilbuilding = new THREE.Object3D();
 		this.geometryCouncilBuilding = null;
-		var manager = new THREE.LoadingManager();
-		manager.onProgress = function ( item, loaded, total ) {
-			console.log( item, loaded, total );
-			loadingProgress('council',loaded, total);
-		};
 		var self = this;
-		var loader = new THREE.OBJLoader( manager );
+		var loader = new THREE.OBJLoader();
 		loader.load( objectPath, function ( object ) {
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
@@ -117,7 +116,7 @@ function background(){
 		self.councilbuilding.rotation.x = 1.56;
 		self.councilbuilding.rotation.z = 0.01;
 		self.councilbuilding.scale.set( scaleFactor, scaleFactor, scaleFactor);
-		sceneBackground.add(self.councilbuilding);
+		this.sceneBackground.add(self.councilbuilding);
 	};
 	// ----------------------------------------------------------------------------------------------
 	this.barcelonaFloorCouncil = function (){
@@ -126,13 +125,8 @@ function background(){
 		this.councilFloor = new THREE.Object3D();
 		this.geometryFloorCouncil = null;
 		
-		var manager = new THREE.LoadingManager();
-		manager.onProgress = function ( item, loaded, total ) {
-			console.log( item, loaded, total );
-			loadingProgress('council',loaded, total);
-		};
 		var self = this;
-		var loader = new THREE.OBJLoader( manager );
+		var loader = new THREE.OBJLoader();
 		loader.load( objectPath, function ( object ) {
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
@@ -151,7 +145,7 @@ function background(){
 
 		var scaleFactor = 4.48;	
 		self.councilFloor.scale.set( scaleFactor, scaleFactor, scaleFactor);
-		sceneBackground.add(self.councilFloor);
+		this.sceneBackground.add(self.councilFloor);
 	};
 	// ----------------------------------------------------------------------------------------------
 	this.barcelonaSkylineFull = function (){
@@ -159,14 +153,9 @@ function background(){
 		var loaderId = 0;
 		this.buildingsMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.buildings = new THREE.Object3D();
-		var manager = new THREE.LoadingManager();
-		manager.onProgress = function ( item, loaded, total ) {
-			console.log( item, loaded, total );
-			loadingProgress('3d',loaded, total);
-		};
 		var self = this;
 
-		var loader = new THREE.OBJLoader( manager );
+		var loader = new THREE.OBJLoader();
 		loader.load( objectPath, function ( object ) {
 			object.traverse( function ( child ) {
 				if ( child instanceof THREE.Mesh ) {
@@ -179,7 +168,7 @@ function background(){
 		var scaleFactor = 1.0;	
 		//self.buildings.rotation.y = 0.76;
 		self.buildings.scale.set( scaleFactor, scaleFactor, scaleFactor);
-		sceneBackground.add(self.buildings);
+		this.sceneBackground.add(self.buildings);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -187,12 +176,12 @@ function background(){
 	this.lights = function (){
 		// Ambient Light
 		this.ambientLight = new THREE.AmbientLight(0x444444);
-		scene.add(this.ambientLight);
+		this.scene.add(this.ambientLight);
       
 		// Directional lighting
 	    this.directionalLight = new THREE.DirectionalLight(0xffffff);
 	    this.directionalLight.position.set(1, 1, 1).normalize();
-	    sceneBackground.add(this.directionalLight);
+	    this.sceneBackground.add(this.directionalLight);
 
 	    // Spot light
 	    //this.spotLight = new THREE.DirectionalLight(0xffffff);
@@ -203,8 +192,8 @@ function background(){
 	// ----------------------------------------------------------------------------------------------
 	// Fog
 	this.fog = function (){
-		scene.fog = new THREE.Fog( 0xffffff, 1, 50000 );
-		scene.fog.color.setHSL( 0.6, 0, 1 );
+		this.scene.fog = new THREE.Fog( 0xffffff, 1, 50000 );
+		this.scene.fog.color.setHSL( 0.6, 0, 1 );
 	}
 
 	// ----------------------------------------------------------------------------------------------
@@ -236,11 +225,11 @@ function background(){
 		}
 
 		mesh = new THREE.Mesh(geometry, meshMaterial);
-		scene.addObject(mesh);
+		this.scene.addObject(mesh);
 
 		mesh = new THREE.Mesh(geometry, meshMaterial);
 		mesh.position.z = - 10000;
-		scene.addObject(mesh);
+		this.scene.addObject(mesh);
 	};
 
 	// ----------------------------------------------------------------------------------------------
