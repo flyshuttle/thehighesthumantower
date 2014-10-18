@@ -155,7 +155,7 @@ function background(){
 	};
 	// ----------------------------------------------------------------------------------------------
 	this.barcelonaSkylineFull = function (){
-		var objectPath = "obj/barcelona_city.obj";
+		var objectPath = "obj/barcelona_ciudad_ok.obj";
 		var loaderId = 0;
 		this.buildingsMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 		this.buildings = new THREE.Object3D();
