@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Totems thehigherhumantower</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="css/ledscreen.css">
+	</head>
+	<body>
+		<div id="ledscreen_background"	class="ledscreen"></div>
+		<div id="ledscreen_foreground"	class="ledscreen"></div>
+	</body>
+	
+	<!-- Libraries JS -->
+<script type='text/javascript' src="js/libs/three.min.js"></script>
+<script type='text/javascript' src="js/libs/stats.min.js"></script>
+<script type='text/javascript' src="js/libs/tween.min.js"></script>
+<script type='text/javascript' src="js/libs/OBJLoader.js"></script>
+<script type='text/javascript' src="js/libs/socket.io.js"></script>
+<script type='text/javascript' src="js/libs/dat.gui.min.js"></script>
+<script type='text/javascript' src="js/libs/jquery-1.11.0.min.js"></script>
+
+<!-- Shaders -->
+<script id="vertexShader" type="x-shader/x-vertex">
+	varying vec2 vUv;
+	void main()
+	{
+		vUv = uv;
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+		gl_Position = projectionMatrix * mvPosition;
+	}
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+	uniform sampler2D texture;
+	uniform vec3 color;
+
+	varying vec2 vUv;
+
+	void main()
+	{
+		vec3 tColor = texture2D( texture, vUv ).rgb;
+		float a = (length(tColor - color) - 0.5) * 7.0;
+		gl_FragColor = vec4(tColor, a);
+	}
+</script>
+
+<script id="frameShader" type="x-shader/x-fragment">
+
+	uniform sampler2D texture;
+	uniform vec3 color;
+	
+	uniform vec2 offset;
+	uniform vec2 frame;
+	
+	varying vec2 vUv;
+
+	void main()
+	{
+		vec2 t = offset + frame*vUv;
+		vec3 tColor = texture2D( texture, t ).rgb;
+		float a = (length(tColor - color) - 0.5) * 7.0;
+		gl_FragColor = vec4(tColor, a);
+	}
+
+</script>
+
+
+<script id="vs_clouds" type="x-shader/x-vertex">
+
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
+
+</script>
+
+<script id="fs_clouds" type="x-shader/x-fragment">
+
+    uniform sampler2D map;
+    uniform vec3 fogColor;
+    uniform float fogNear;
+    uniform float fogFar;
+    varying vec2 vUv;
+
+    void main() {
+        float depth = gl_FragCoord.z / gl_FragCoord.w;
+        float fogFactor = smoothstep( fogNear, fogFar, depth );
+        gl_FragColor = texture2D( map, vUv );
+        gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+        gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+    }
+
+</script>
+
+<!-- scripts JS -->
+<script src="js/imageLoader.js"></script>
+<script src="js/spritesheetmaterial.js"></script>
+<script src="js/socketManager.js"></script>
+<script src="js/human.js"></script>
+<script src="js/tower.js"></script>
+<script src="js/background.js"></script>
+<script src="js/ledscreen.js"></script>
+<script src="js/ledsmain.js"></script>
+
+</html>
