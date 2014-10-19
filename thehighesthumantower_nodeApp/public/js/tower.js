@@ -13,6 +13,12 @@ Tower = function(){
 	
 	this.autoHide = true;
 	
+	var texture = new THREE.ImageUtils.loadTexture('img/aixeneta2048.jpg')
+	this.aixenetaMaterial = new SpriteSheetMaterial(texture,1,1,8,4,32,10,1);
+	var aixeneta = new THREE.Mesh(new THREE.PlaneGeometry(50,100, 1, 1), this.aixenetaMaterial); 
+	aixeneta.position.y=50;
+	this.add(aixeneta);
+	
 	this.init = function(array){
 		var i;
 		
@@ -117,10 +123,11 @@ Tower = function(){
 	}
 	
 	//updates active humans
-	this.update = function(ms){
+	this.update = function(sec){
 		var i;
+		this.aixenetaMaterial.update(sec);
 		for(i in this.activeHumans){
-			this.activeHumans[i].update(ms);
+			this.activeHumans[i].update(sec);
 		}
 		
 	}
