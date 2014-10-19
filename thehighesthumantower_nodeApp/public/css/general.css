@@ -34,6 +34,15 @@ body {
     text-align: center;
 }
 
+#loading_label{
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	text-align: center;
+	margin-top: -10px;
+	height: 100%;
+}
+
 .loading:after {
 	border-width: 0 3px 0 0;
 	border-style: solid;
@@ -63,8 +72,11 @@ body {
 
 #altimeter{
 	position: absolute;
-	bottom: 0px; 
-	left:250px;
+	bottom: 60px; 
+	left:%50;
+	width:100%;
+	margin-left: 250px;
+	text-align: center;
 	font-size:24px;
 }
 

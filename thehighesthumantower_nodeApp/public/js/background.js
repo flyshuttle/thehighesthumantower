@@ -54,7 +54,7 @@ function background(_scene,_sceneBackground){
 		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(100000, 100000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
 		this.sea.position.z = -100;
-		this.sceneBackground.add(this.sea);
+		//this.sceneBackground.add(this.sea);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -233,6 +233,97 @@ function background(_scene,_sceneBackground){
 	};
 
 	// ----------------------------------------------------------------------------------------------
+	// Clouds
+	this.initSky = function(){
+
+		// Add Sky Mesh
+		sky = new THREE.Sky();
+		this.scene.add( sky.mesh );
+
+		// Add Sun Helper
+		sunSphere = new THREE.Mesh( new THREE.SphereGeometry( 20000, 30, 30 ),
+			new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: false }));
+		sunSphere.position.y = -700000;
+		sunSphere.visible = true;
+		this.scene.add( sunSphere );
+
+		/// GUI
+
+		var effectController  = {
+			turbidity: 10,
+			reileigh: 2,
+			mieCoefficient: 0.005,
+			mieDirectionalG: 0.8,
+			luminance: 1,
+			inclination: 0.49, // elevation / inclination
+			azimuth: 0.25, // Facing front,					
+			sun: !true
+		}
+
+		var distance = 400000;
+
+		function guiChanged() {
+			var uniforms = sky.uniforms;
+			uniforms.turbidity.value = effectController.turbidity;
+			uniforms.reileigh.value = effectController.reileigh;
+			uniforms.luminance.value = effectController.luminance;
+			uniforms.mieCoefficient.value = effectController.mieCoefficient;
+			uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
+
+			var theta = Math.PI * (effectController.inclination - 0.5);
+			var phi = 2 * Math.PI * (effectController.azimuth - 0.5);
+
+			sunSphere.position.x = distance * Math.cos(phi);
+			sunSphere.position.y = distance * Math.sin(phi) * Math.sin(theta); 
+			sunSphere.position.z = distance * Math.sin(phi) * Math.cos(theta); 
+
+			sunSphere.visible = effectController.sun;
+
+			sky.uniforms.sunPosition.value.copy(sunSphere.position);
+
+		}
+		guiChanged();
+	
+	};
+
+	this.seaWidthShader = function(){
+		var parameters = {
+			width: 2000,
+			height: 2000,
+			widthSegments: 250,
+			heightSegments: 250,
+			depth: 1500,
+			param: 4,
+			filterparam: 1
+		}
+			
+		waterNormals = new THREE.ImageUtils.loadTexture( 'textures/waternormals.jpg' );
+		waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping; 
+
+		water = new THREE.Water( renderer, camera, scene, {
+			textureWidth: 512, 
+			textureHeight: 512,
+			waterNormals: waterNormals,
+			alpha: 	1.0,
+			sunDirection: this.directionalLight.position.normalize(),
+			sunColor: 0xffffff,
+			waterColor: 0x001e0f,
+			distortionScale: 50.0,
+		} );
+
+
+		mirrorMesh = new THREE.Mesh(
+			new THREE.PlaneGeometry( parameters.width * 500, parameters.height * 500, 50, 50 ), 
+			water.material
+		);
+		
+
+		mirrorMesh.add( water );
+		mirrorMesh.rotation.x = - Math.PI * 0.5;
+		this.sceneBackground.add( mirrorMesh );
+	}
+
+	// ----------------------------------------------------------------------------------------------
 	// Setup
 	// ----------------------------------------------------------------------------------------------
 	
@@ -242,6 +333,8 @@ function background(_scene,_sceneBackground){
 	this.lights();
 	this.sea();
 	this.floor();
+	this.seaWidthShader();
+	//this.initSky();
 	//this.fog();
 	//this.clouds();
 	// ----------------------------------------------------------------------------------------------

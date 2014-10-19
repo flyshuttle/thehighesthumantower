@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.engine('html', require('ejs').renderFile);
+//app.engine('html', require('ejs').renderFile);
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -76,22 +76,20 @@ app.get('/tower-json', function(req, res) {
   });
 });
 
-app.get('/form', function(req, res) {
-  res.render('form.html');
-});
+
 
 /* Receive new interaction */
 app.post('/insert-new', function(req, res) {
     // specify the database we are going to use
     
     var form = new formidable.IncomingForm();
-
-    var heighPerson = form.heighPerson;
-    console.log("heighPerson:"+heighPerson);
-
     form.parse(req, function(err, fields, files) {
-        
-        db.insert({ heighPerson: heighPerson }, function(err, body, header) {
+        //console.log(fields)
+        // get fields data
+        var heighPerson = fields.heightPerson;
+        var heightPercentage = heightPercentage;
+        // save to database
+        db.insert({ 'heightPerson': heightPerson,'heightPercentage': heightPercentage }, function(err, body, header) {
             if (err) {
                 console.log('[db.insert] ', err.message);
                 return;
@@ -106,7 +104,6 @@ app.post('/insert-new', function(req, res) {
             console.log(serverPath);
             // Create Folder
             // Single512
-                
                 var file_single512 = files.single512;
                 convert(file_single512.path, serverPath+'single/512/'+file_single512.name.replace(".png", ".jpg"), {},
                   function(err) {
@@ -162,8 +159,11 @@ app.post('/insert-new', function(req, res) {
                     }
                   }
                 );
-                // Give information
-                io.sockets.emit('new-human',{id:body.id,heighPerson:heighPerson});
+                // Give information that have new human after 5s
+                setTimeout(function(){
+                    io.sockets.emit('new-human',{id:body.id,heighPerson:heighPerson});    
+                },5000);
+                
             //});
             
         });
@@ -208,20 +208,7 @@ server.listen(3000, function() {
     // server started
     io.on('connection', function(socket){
         console.log("connected socket");
-
-        myModel.findAll(function(error, results) {
-        if (error){
-            console.error('failed list documents');
-        }else{
-            // filter to objects need to display
-            var list = [];
-            for(var i =0;i<results.length;i++){
-                list.push(_.pick(results[i],'heighPerson','id'));
-            }
-            // send json to new connected people
-            io.sockets.emit('connected',list);
-        }
-      });
+      
     });
 });
 

@@ -36,10 +36,13 @@
 	obj.scale.multiplyScalar(0.01);
 	scene.add(obj);
 	
-	$.getJSON( "tower2.json", function( data ) {
-			tower.init(data);
-			tower.position.y=tower.height;
-		});
+	var towerJsonPath = "tower2.json";
+	//var towerJsonPath = "http://thehighesthumantower.com/tower-json";
+
+	$.getJSON( towerJsonPath, function( data ) {
+		tower.init(data);
+		tower.position.y=tower.height;
+	});
 
 	// detect if is mobile platform
 	var md = new MobileDetect(window.navigator.userAgent);
@@ -314,7 +317,7 @@
 		}
 	}
 
-	//setupSocket();
+	setupSocket();
 	
 
 	
