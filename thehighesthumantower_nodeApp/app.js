@@ -67,7 +67,7 @@ app.get('/tower-json', function(req, res) {
         // filter to objects need to display
         var list = [];
         for(var i =0;i<results.length;i++){
-            var obj = _.pick(results[i],'heightPerson','_id');
+            var obj = _.pick(results[i],'_id','heightPerson');
             list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':i});
         }
         // return request as json 
