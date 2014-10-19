@@ -67,7 +67,7 @@ app.get('/tower-json', function(req, res) {
         // filter to objects need to display
         var list = [];
         for(var i =0;i<results.length;i++){
-            list.push(_.pick(results[i],'heighPerson','_id'));
+            list.push(_.pick(results[i],'heightPerson','_id'));
         }
         // return request as json 
         res.setHeader('Content-Type','application/json');
@@ -86,7 +86,7 @@ app.post('/insert-new', function(req, res) {
     form.parse(req, function(err, fields, files) {
         //console.log(fields)
         // get fields data
-        var heighPerson = fields.heightPerson;
+        var heightPerson = fields.heightPerson;
         var heightPercentage = heightPercentage;
         // save to database
         db.insert({'heightPerson': heightPerson,'heightPercentage': heightPercentage }, function(err, body, header) {
@@ -161,7 +161,7 @@ app.post('/insert-new', function(req, res) {
                 );
                 // Give information that have new human after 5s
                 setTimeout(function(){
-                    io.sockets.emit('new-human',{id:body.id,heighPerson:heighPerson});    
+                    io.sockets.emit('new-human',{id:body.id,heightPerson:body.heightPerson});    
                 },5000);
                 
             //});
