@@ -67,7 +67,7 @@ app.get('/tower-json', function(req, res) {
         // filter to objects need to display
         var list = [];
         for(var i =0;i<results.length;i++){
-            list.push(_.pick(results[i],'heighPerson'));
+            list.push(_.pick(results[i],'heighPerson','_id'));
         }
         // return request as json 
         res.setHeader('Content-Type','application/json');
@@ -89,7 +89,7 @@ app.post('/insert-new', function(req, res) {
         var heighPerson = fields.heightPerson;
         var heightPercentage = heightPercentage;
         // save to database
-        db.insert({ 'heightPerson': heightPerson,'heightPercentage': heightPercentage }, function(err, body, header) {
+        db.insert({'heightPerson': heightPerson,'heightPercentage': heightPercentage }, function(err, body, header) {
             if (err) {
                 console.log('[db.insert] ', err.message);
                 return;
