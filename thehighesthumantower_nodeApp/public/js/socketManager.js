@@ -30,6 +30,10 @@ function setupSocket(){
   
   socket.on('new-human',function(data){
     console.log('new-human', data);
+    // Data 
+    var id = data._id;
+    var heightPerson = data.heightPerson;
+    var position = data.position;
   });
 
 }

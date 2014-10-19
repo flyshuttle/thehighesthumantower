@@ -67,7 +67,8 @@ app.get('/tower-json', function(req, res) {
         // filter to objects need to display
         var list = [];
         for(var i =0;i<results.length;i++){
-            list.push(_.pick(results[i],'heightPerson','_id'));
+            var obj = _.pick(results[i],'heightPerson','_id');
+            list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':i});
         }
         // return request as json 
         res.setHeader('Content-Type','application/json');
@@ -161,7 +162,9 @@ app.post('/insert-new', function(req, res) {
                 );
                 // Give information that have new human after 5s
                 setTimeout(function(){
-                    io.sockets.emit('new-human',{id:body.id,heightPerson:body.heightPerson});    
+                    myModel.findAll(function(error, results) {
+                        io.sockets.emit('new-human',{'_id':body.id,'heightPerson':body.heightPerson,'position':(results.length-1)});   
+                    }); 
                 },5000);
                 
             //});
