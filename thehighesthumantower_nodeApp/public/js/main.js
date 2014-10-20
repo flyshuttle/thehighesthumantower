@@ -37,8 +37,10 @@
 	scene.add(obj);
 	
 	var towerJsonPath = "http://localhost:3000/tower-json";
-	//var towerJsonPath = "http://thehighesthumantower.com/tower-json";
-
+	if(document.URL.indexOf('localhost')== -1){
+		towerJsonPath = "http://thehighesthumantower.com/tower-json";
+	}
+	
 	$.getJSON( towerJsonPath, function( data ) {
 		tower.init(data);
 		tower.position.y=tower.height;
