@@ -136,7 +136,7 @@ Tower = function(){
 	this.update = function(sec){
 		var i;
 		this.aixenetaMaterial.update(sec);
-		console.log(this.activeHumans.length);
+		
 		for(i in this.activeHumans){
 			this.activeHumans[i].update(sec);
 		}

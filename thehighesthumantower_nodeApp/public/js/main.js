@@ -178,8 +178,18 @@
 		//crash to the floor
 		if(camera.position.y<0.1){
 			camSpeed=(camSpeed<0)?-camSpeed:camSpeed;	
+			camSpeed *= 0.5;
 			camAccel =  0;	
 			camera.position.y=0.1;
+		}
+		
+		//crash to the top
+		if(camera.position.y>tower.position.y+200){
+			camSpeed=(camSpeed>0)?-camSpeed:camSpeed;	
+			camAccel =  0;	
+			camSpeed *= 0.5;
+			camera.position.y=tower.position.y+200;
+			
 		}
 		
 		//camera tilt
@@ -284,13 +294,13 @@
 	var myElement = document.getElementById('threejs_tower');
 	var myOptions  = {'threshold':10};
 	var hammertime = new Hammer(myElement, myOptions);
-		hammertime.on('panup pandown', function(ev) {
-    	console.log(ev);
-    	if(ev.type=='panup'){
-    		camAccel+=1;
-    	}else if(ev.type=='pandown'){
-    		camAccel-=1;
-    	}
+	hammertime.on('panup pandown', function(ev) {
+		console.log(ev);
+		if(ev.type=='panup'){
+			camAccel+=1;
+		}else if(ev.type=='pandown'){
+			camAccel-=1;
+		}
 	});
 
 	//form
