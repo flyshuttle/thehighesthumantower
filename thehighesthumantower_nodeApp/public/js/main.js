@@ -20,6 +20,8 @@
 	var camera = new THREE.PerspectiveCamera(50,1,0.1,2000000);
 	camera.position.set(0, 0, 400);
 	
+	tower.addCamera(camera);
+	
 	// Render the city in logarithmicDepthBuffer and tower in a normal renderer
 	var rendererBackground = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
 	rendererBackground.setClearColor(0xffffff);
@@ -197,7 +199,7 @@
 		}
 		
 		//prepare view
-		tower.prepareView(camera.position.y);
+		tower.prepareView(camera);
 		
 		
 		

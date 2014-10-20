@@ -2,6 +2,11 @@
 	var clock = new THREE.Clock();
 	
 	var tower = new Tower();
+	tower.visibleTopRadius     = 10;
+	tower.visibleBottomRadius  = 10;
+	tower.activeTopRadius      = 3;
+	tower.activeBottomRadius   = 3;
+	
 	var scene = new THREE.Scene();
 	var sceneBackground = new THREE.Scene();
 	
@@ -44,15 +49,20 @@
 		});
 	
 	var ledscreens =[
-				new LedScreen(160*0,0,162,640,2.78 ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*1,0,162,640,10.0,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*2,0,162,640,40  ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*3,0,162,640,50  ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*4,0,162,640,60  ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*5,0,162,640,70  ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*6,0,162,640,70  ,scene,renderer,sceneBackground,rendererBackground,obj)
+				new LedScreen(160*0,0,162,640,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*1,0,162,640,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*2,0,162,640,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*3,0,162,640,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*4,0,162,640,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*5,0,162,640,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*6,0,162,640,scene,renderer,sceneBackground,rendererBackground,obj)
 			]
 	
+	for(var i=0;i<ledscreens.length;i++){
+		var camera = ledscreens[i].camera;
+		tower.addCamera(camera);
+	}
+
 	// animate
 	var animate = function () {
 		
@@ -69,7 +79,7 @@
 		for(var i=0;i<ledscreens.length;i++){
 			var camera = ledscreens[i].camera;
 			camera.position.y=(i/(ledscreens.length-1))*(tower.position.y);
-			camera.updateProjectionMatrix();
+			tower.prepareView(camera);
 			ledscreens[i].animate();
 		}
 		

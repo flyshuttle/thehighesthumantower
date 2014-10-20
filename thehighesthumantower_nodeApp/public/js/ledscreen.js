@@ -6,9 +6,9 @@
  * scene, renderer 
  */
 
-function LedScreen(left, bottom, width, height,cameraAltitude,scene,renderer,sceneBackground,rendererBackground,obj){
+function LedScreen(left, bottom, width, height,scene,renderer,sceneBackground,rendererBackground,obj){
 
-	this.cameraAltitude = cameraAltitude;
+	
 	
 	//init
 	this.left   = left;
@@ -24,7 +24,7 @@ function LedScreen(left, bottom, width, height,cameraAltitude,scene,renderer,sce
 	
 	this.camera = new THREE.PerspectiveCamera( 50, this.width / this.height,0.1,2000000);
 	this.camera.position.z = 400;
-	this.camera.position.y = cameraAltitude*(Human.meshHeight/Human.realHeight);
+	
 	obj.add(this.camera);
 	this.animate = function() {
 		

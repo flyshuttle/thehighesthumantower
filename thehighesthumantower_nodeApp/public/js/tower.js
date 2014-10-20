@@ -2,9 +2,12 @@ Tower = function(){
 	THREE.Object3D.call( this );
 	this.humans = []; 
 	this.activeHumans  = [];
-	this.visibleIndex  = {}; //index of the 
-	this.topRadius     = 3;
-	this.bottomRadius  = 3;
+	this.visibleIndex  = {}; //index of the [camera]->visibleIndex
+	this.visibleTopRadius     = 10;
+	this.visibleBottomRadius  = 10;
+	this.activeTopRadius      = 3;
+	this.activeBottomRadius   = 3;
+	
 	
 	this.maxActiveHumans = 50;
 	this.height = 0;
@@ -156,40 +159,46 @@ Tower = function(){
 		//TODO:this can be cached
 		var index  = this.getIndexAtHeight(camera.position.y);
 		var i;
-		//bottom visible
-		var bottomValidIndex = this.bottomRadius;
-		var topValidIndex    = this.humans.length-this.topRadius-1;
+		
+		//visible humans are between this two indexes
+		var bottomVisibleIndex = this.visibleBottomRadius;
+		var topVisibleIndex    = this.humans.length-this.visibleTopRadius-1;
+		
+		//active humans are between this two indexes
+		var bottomActiveIndex  = this.activeBottomRadius;
+		var topActiveIndex    = this.humans.length-this.activeTopRadius-1;
+		
 		
 		var visibleIndex = this.visibleIndex[camera];
 		//nothing has changed
 		if(index == visibleIndex || index==-1){
 			return;
 		}
-		var human;
+		
 		if(index < visibleIndex){
 			//shift the visible humans down
 			for(;visibleIndex>index;visibleIndex--){
-				if(visibleIndex>=bottomValidIndex){
-					human = this.humans[visibleIndex-this.bottomRadius];
-					tower.activate(visibleIndex-this.bottomRadius);
-					this.add(human);
+				if(visibleIndex>=bottomVisibleIndex){
+					this.add(this.humans[visibleIndex-this.visibleBottomRadius]);
 				}
-				if(visibleIndex<=topValidIndex){
-					human = this.humans[visibleIndex+this.topRadius];
-					this.remove(human);
+				if(visibleIndex<=topVisibleIndex){
+					this.remove(this.humans[visibleIndex+this.visibleTopRadius]);
+				}
+				if(visibleIndex>=bottomActiveIndex){
+					this.activate(visibleIndex-this.activeBottomRadius);
 				}
 			}
 		}else{
 			//shift the visible humans up
 			for(;visibleIndex<index;visibleIndex++){
-				if(visibleIndex>=bottomValidIndex){
-					human = this.humans[visibleIndex-this.bottomRadius];
-					this.remove(human);
+				if(visibleIndex>=bottomVisibleIndex){
+					this.remove(this.humans[visibleIndex-this.visibleBottomRadius]);
 				}
-				if(visibleIndex<=topValidIndex){
-					human = this.humans[visibleIndex+this.topRadius];
-					tower.activate(visibleIndex+this.topRadius);
-					this.add(human);
+				if(visibleIndex<=topVisibleIndex){
+					this.add(this.humans[visibleIndex+this.visibleTopRadius]);
+				}
+				if(visibleIndex<=topActiveIndex){
+					this.activate(visibleIndex+this.activeTopRadius);
 				}
 			}
 		}
