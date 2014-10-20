@@ -88,7 +88,7 @@ app.post('/insert-new', function(req, res) {
     form.parse(req, function(err, fields, files) {
         //console.log(fields)
         // get fields data
-        var heightPerson = fields.heightPerson;
+        var heightPerson = parseInt(fields.heightPerson);
         var heightPercentage = heightPercentage;
         // save to database
         db.insert({'heightPerson': heightPerson,'heightPercentage': heightPercentage }, function(err, body, header) {
@@ -96,18 +96,20 @@ app.post('/insert-new', function(req, res) {
                 console.log('[db.insert] ', err.message);
                 return;
             }
-
+            myModel.findAll(function(error, results) {
             // Upload to internet
-            res.setHeader('Content-Type','application/json');
-            res.end(JSON.stringify(body));
-            console.log(body);
 
-            var serverPath = __dirname +'/public/img/';
-            console.log(serverPath);
-            // Create Folder
+		var position = results.length-1;
+		res.setHeader('Content-Type','application/json');
+		res.end(JSON.stringify(body));
+		console.log(body);
+
+		var serverPath = __dirname +'/public/img/';
+		console.log(serverPath);
+		// Create Folder
                 // Animation2048
                 var imgfilepath = serverPath+'temp/'+body.id+path.extname(files.animation2048.name);
-		var position = Math.floor(Math.random()*128);
+		
                 //move downloaded file with document's id
                 fs.writeFileSync(imgfilepath, fs.readFileSync(files.animation2048.path));
                 //run python script to resize and update the spritesheets
@@ -127,12 +129,12 @@ app.post('/insert-new', function(req, res) {
 		
                 // Give information that have new human after 5s
                 setTimeout(function(){
-                    myModel.findAll(function(error, results) {
-                        io.sockets.emit('new-human',{'_id':body.id,'heightPerson':body.heightPerson,'position':(results.length-1)});   
-                    }); 
-                },5000);
+			var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position};
+			console.log(humanInfo);
+                        io.sockets.emit('new-human',humanInfo);   
+                    },5000);
                 
-            //});
+            });
             
         });
     });

@@ -54,7 +54,7 @@ Human.prototype.activate = function(active){
 	if(active==true){
 		console.log("activated:"+this.ident);
 		this.loader = new THREE.ImageLoader();
-		this.loader.load('img/spritesheet'+Human.textureSize+'.jpg?id='+this.ident,this.onLoad.bind(this));
+		this.loader.load('img/animations/'+Human.textureSize+'/'+this.ident+'.jpg',this.onLoad.bind(this));
 	}else{
 		console.log("deactiated"+this.ident);
 		var texture = this.material.texture;

@@ -32,8 +32,16 @@ function setupSocket(){
     console.log('new-human', data);
     // Data 
     var id = data._id;
-    var heightPerson = data.heightPerson;
+    var heightPerson = data.heightPerson/100; //in m  
     var position = data.position;
+    
+    //Human
+    var texture = new THREE.ImageUtils.loadTexture('img/single/'+id+'.jpg');
+    var height  = heightPerson/Human.realHeight;
+    var material = new SpriteSheetMaterial(texture,1,1,1,1,1,6,height);
+    var human = new Human(id,height,material);
+    addHuman(human);
+    
   });
 
 }

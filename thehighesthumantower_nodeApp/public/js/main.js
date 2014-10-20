@@ -36,7 +36,7 @@
 	obj.scale.multiplyScalar(0.01);
 	scene.add(obj);
 	
-	var towerJsonPath = "tower2.json";
+	var towerJsonPath = "http://localhost:3000/tower-json";
 	//var towerJsonPath = "http://thehighesthumantower.com/tower-json";
 
 	$.getJSON( towerJsonPath, function( data ) {
@@ -202,7 +202,6 @@
 		
 		renderer.render(scene, camera);
 		rendererBackground.render(sceneBackground, camera);
-		stats.update();
 		requestAnimationFrame(animate);
 	}
 	

@@ -39,8 +39,8 @@ Tower = function(){
 		}
 		
 		for(i=0;i<array.length;i++){
-			var id     = array[i][0]; //[id,height]
-			var height = array[i][1];
+			var id     = array[i]['_id']; 
+			var height = array[i]['heightPerson']/Human.realHeight/100;
 			var spriteSheet = this.spritesheets[Math.floor(i/128)];
 			var spriteIndex = i % 128;
 			var material = new SpriteSheetMaterial(spriteSheet,1,1,16,8,128,0,height);
