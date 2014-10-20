@@ -328,7 +328,7 @@
 			animate();
 			$('#splash').fadeOut();
 			//remove onLoad handler 
-			THREE.DefaultLoadingManager.onProgress =null;
+			THREE.DefaultLoadingManager.onProgress =undefined;
 		}
 	}
 
