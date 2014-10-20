@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
+var path = require('path')
 
 var convert = require('netpbm').convert;
 var _ = require("underscore");
@@ -95,7 +96,7 @@ app.post('/insert-new', function(req, res) {
                 console.log('[db.insert] ', err.message);
                 return;
             }
-          
+
             // Upload to internet
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify(body));
@@ -104,62 +105,26 @@ app.post('/insert-new', function(req, res) {
             var serverPath = __dirname +'/public/img/';
             console.log(serverPath);
             // Create Folder
-            // Single512
-                var file_single512 = files.single512;
-                convert(file_single512.path, serverPath+'single/512/'+file_single512.name.replace(".png", ".jpg"), {},
-                  function(err) {
-                    if (!err) {
-                      console.log("Your 512 image is ready!");
-                    }
-                  }
-                );
-                // Single1024
-                var file_single1024 = files.animation1024;
-                convert(file_single1024.path, serverPath+'single/1024/'+file_single1024.name.replace(".png", ".jpg"), {},
-                  function(err) {
-                    if (!err) {
-                      console.log("Your 1024 image is ready!");
-                    }
-                  }
-                );
-                // Single2048
-                var file_single2048 = files.single2048;
-                convert(file_single2048.path, serverPath+'single/2048/'+file_single512.name.replace(".png", ".jpg"), {},
-                  function(err) {
-                    if (!err) {
-                      console.log("Your 2048 image is ready!");
-                    }
-                  }
-                );
-                // --------------------------------------------------
-                // Animation512
-                
-                var file_animation512 = files.animation512;
-                convert(file_animation512.path, serverPath+'people/512/'+file_animation512.name.replace(".png", ".jpg"), {},
-                  function(err) {
-                    if (!err) {
-                      console.log("Your 512 image is ready!");
-                    }
-                  }
-                );
-                // Animation1024
-                var file_animation1024 = files.animation1024;
-                convert(file_animation1024.path, serverPath+'people/1024/'+file_animation1024.name.replace(".png", ".jpg"), {},
-                  function(err) {
-                    if (!err) {
-                      console.log("Your 1024 image is ready!");
-                    }
-                  }
-                );
                 // Animation2048
-                var file_animation2048 = files.animation2048;
-                convert(file_animation2048.path, serverPath+'people/2048/'+file_animation512.name.replace(".png", ".jpg"), {},
-                  function(err) {
-                    if (!err) {
-                      console.log("Your 2048 image is ready!");
-                    }
-                  }
-                );
+                var imgfilepath = serverPath+'temp/'+body.id+path.extname(files.animation2048.name);
+		var position = Math.floor(Math.random()*128);
+                //move downloaded file with document's id
+                fs.writeFileSync(imgfilepath, fs.readFileSync(files.animation2048.path));
+                //run python script to resize and update the spritesheets
+		var exec = require('child_process').exec;
+		var child;
+
+		child = exec(__dirname +'/public/img/generateSpriteSheets.py '+imgfilepath+' '+position,
+			{cwd:__dirname +'/public/img/'},
+			function (error, stdout, stderr) {
+					console.log('stdout: ' + stdout);
+					console.log('stderr: ' + stderr);
+				if (error !== null) {
+					console.log('exec error: ' + error);
+				}
+			});
+		
+		
                 // Give information that have new human after 5s
                 setTimeout(function(){
                     myModel.findAll(function(error, results) {
