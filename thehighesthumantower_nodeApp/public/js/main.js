@@ -293,6 +293,7 @@
 
 	//form
 	function formHandler(event){
+		
 		event.preventDefault();
 		var fieldValue = parseInt($('#findfield').val());
 		if(!isNaN(fieldValue) && fieldValue>=0 && fieldValue<tower.humans.length){
@@ -314,6 +315,8 @@
 			//start rendering when everything is loaded
 			animate();
 			$('#splash').fadeOut();
+			//remove onLoad handler 
+			THREE.DefaultLoadingManager.onProgress =null;
 		}
 	}
 
