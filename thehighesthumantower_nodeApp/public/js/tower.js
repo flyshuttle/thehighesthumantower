@@ -2,11 +2,11 @@ Tower = function(){
 	THREE.Object3D.call( this );
 	this.humans = []; 
 	this.activeHumans  = [];
-	this.visibleIndex  = 0; //index of the 
-	this.topRadius     = 80;
-	this.bottomRadius  = 10;
+	this.visibleIndex  = {}; //index of the 
+	this.topRadius     = 3;
+	this.bottomRadius  = 3;
 	
-	this.maxActiveHumans = 1;
+	this.maxActiveHumans = 50;
 	this.height = 0;
 	this.spritesheets = [];
 	this.textureSize = 1024;
@@ -86,7 +86,7 @@ Tower = function(){
 	}
 	
 	this.activate = function(index){
-		/*
+	
 		var human = this.humans[index];
 		
 		if(index!=-1 && this.activeHumans.indexOf(human)==-1){
@@ -102,7 +102,7 @@ Tower = function(){
 			this.activeHumans[0].activate(false);
 			this.activeHumans.splice(0,1);	
 		}
-		*/
+	
 		
 	}
 	//get the nearest human to certain height
@@ -133,51 +133,68 @@ Tower = function(){
 	this.update = function(sec){
 		var i;
 		this.aixenetaMaterial.update(sec);
+		console.log(this.activeHumans.length);
 		for(i in this.activeHumans){
 			this.activeHumans[i].update(sec);
 		}
 		
 	}
 	
+	this.addCamera = function(camera){
+		this.visibleIndex[camera]=0;
+		
+	}
+	
+	
 	//show the humans that can bee seen at certain height and hides the rest
-	this.prepareView = function(height){
+	this.prepareView = function(camera){
 		
 		if(this.autoHide==false){
 			return;
 		}
 		
 		//TODO:this can be cached
-		var index  = this.getIndexAtHeight(height);
+		var index  = this.getIndexAtHeight(camera.position.y);
 		var i;
+		//bottom visible
 		var bottomValidIndex = this.bottomRadius;
 		var topValidIndex    = this.humans.length-this.topRadius-1;
+		
+		var visibleIndex = this.visibleIndex[camera];
 		//nothing has changed
-		if(index == this.visibleIndex || index==-1){
+		if(index == visibleIndex || index==-1){
 			return;
-		}else if(index < this.visibleIndex){
-			
+		}
+		var human;
+		if(index < visibleIndex){
 			//shift the visible humans down
-			for(;this.visibleIndex>index;this.visibleIndex--){
-				if(this.visibleIndex>bottomValidIndex){
-					//this.humans[this.visibleIndex-this.bottomRadius].visible=true;
-					this.add(this.humans[this.visibleIndex-this.bottomRadius]);
+			for(;visibleIndex>index;visibleIndex--){
+				if(visibleIndex>=bottomValidIndex){
+					human = this.humans[visibleIndex-this.bottomRadius];
+					tower.activate(visibleIndex-this.bottomRadius);
+					this.add(human);
 				}
-				if(this.visibleIndex<topValidIndex){
-					//this.humans[this.visibleIndex+this.topRadius].visible=false;
-					this.remove(this.humans[this.visibleIndex+this.topRadius]);
+				if(visibleIndex<=topValidIndex){
+					human = this.humans[visibleIndex+this.topRadius];
+					this.remove(human);
 				}
 			}
 		}else{
 			//shift the visible humans up
-			for(;this.visibleIndex<index;this.visibleIndex++){
-				if(this.visibleIndex>bottomValidIndex)
-					//this.humans[this.visibleIndex-this.bottomRadius].visible=false;
-					this.remove(this.humans[this.visibleIndex-this.bottomRadius]);
-				if(this.visibleIndex<topValidIndex)
-					//this.humans[this.visibleIndex+this.topRadius].visible=true;
-					this.add(this.humans[this.visibleIndex+this.topRadius]);	
+			for(;visibleIndex<index;visibleIndex++){
+				if(visibleIndex>=bottomValidIndex){
+					human = this.humans[visibleIndex-this.bottomRadius];
+					this.remove(human);
+				}
+				if(visibleIndex<=topValidIndex){
+					human = this.humans[visibleIndex+this.topRadius];
+					tower.activate(visibleIndex+this.topRadius);
+					this.add(human);
+				}
 			}
 		}
+		
+		this.visibleIndex[camera] = visibleIndex; 
 	}
 	//remove all humans
 	this.removeAll = function(){
