@@ -6,7 +6,7 @@ Tower = function(){
 	this.topRadius     = 80;
 	this.bottomRadius  = 10;
 	
-	this.maxActiveHumans = 10;
+	this.maxActiveHumans = 1;
 	this.height = 0;
 	this.spritesheets = [];
 	this.textureSize = 1024;
@@ -86,17 +86,24 @@ Tower = function(){
 	}
 	
 	this.activate = function(index){
+		/*
 		var human = this.humans[index];
+		
 		if(index!=-1 && this.activeHumans.indexOf(human)==-1){
 			human.activate(true);
 			this.activeHumans.push(human);
 			console.log("active:"+index);
+			console.log("COUNT:"+this.activeHumans.length);
+			
 		}
+		
 		//in case there are too many active
 		if(this.activeHumans.length>this.maxActiveHumans){
 			this.activeHumans[0].activate(false);
 			this.activeHumans.splice(0,1);	
 		}
+		*/
+		
 	}
 	//get the nearest human to certain height
 	this.getIndexAtHeight = function(height){

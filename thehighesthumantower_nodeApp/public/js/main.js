@@ -32,7 +32,7 @@
 	var obj = new THREE.Object3D();
 	obj.add(camera);
 	obj.add(tower);
-	obj.position.y=9; 
+	obj.position.y=10; 
 	obj.scale.multiplyScalar(0.01);
 	scene.add(obj);
 	
@@ -92,7 +92,6 @@
 	gui.addColor(control, 'directionalLightColor');
 	gui.add(control, 'directionalLightIntensity', 0, 5, 0.1);
 	gui.addColor(control, 'ambientLightColor');
-	gui.add(myBackground.sea.position,'z',-500, 500);
 	
 	var humanGui = gui.addFolder('Human');	 
 	var humanTextureSizeControllertower = humanGui.add(Human,'textureSize',[512,1024,2048]);

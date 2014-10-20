@@ -54,7 +54,7 @@ function background(_scene,_sceneBackground){
 		this.sea = new THREE.Mesh(new THREE.PlaneGeometry(100000, 100000, 10, 10), this.seaMaterial );
 		this.sea.rotation.x = Math.PI / 2;
 		this.sea.position.z = -100;
-		//this.sceneBackground.add(this.sea);
+		this.sceneBackground.add(this.sea);
 	};
 
 	// ----------------------------------------------------------------------------------------------
@@ -287,6 +287,7 @@ function background(_scene,_sceneBackground){
 	};
 
 	this.seaWidthShader = function(){
+	/*
 		var parameters = {
 			width: 2000,
 			height: 2000,
@@ -321,6 +322,7 @@ function background(_scene,_sceneBackground){
 		mirrorMesh.add( water );
 		mirrorMesh.rotation.x = - Math.PI * 0.5;
 		this.sceneBackground.add( mirrorMesh );
+		*/
 	}
 
 	// ----------------------------------------------------------------------------------------------
@@ -333,7 +335,7 @@ function background(_scene,_sceneBackground){
 	this.lights();
 	this.sea();
 	this.floor();
-	this.seaWidthShader();
+	//this.seaWidthShader();
 	//this.initSky();
 	//this.fog();
 	//this.clouds();

@@ -7,7 +7,7 @@
 	
 	var obj = new THREE.Object3D();
 	obj.add(tower);
-	obj.position.y=9; 
+	obj.position.y=10; 
 	obj.scale.multiplyScalar(0.01);
 	scene.add(obj);
 	
@@ -31,9 +31,14 @@
 	
 	// background
 	var myBackground = new background();
-
 	
-	$.getJSON( "tower2.json", function( data ) {
+	var towerJsonPath = "http://localhost:3000/tower-json";
+	
+	if(document.URL.indexOf('localhost')== -1){
+		towerJsonPath = "http://thehighesthumantower.com/tower-json";
+	}
+
+	$.getJSON( towerJsonPath, function( data ) {
 			tower.init(data);
 			tower.position.y=tower.height;
 		});
@@ -92,9 +97,8 @@
 		tween.onComplete(function(){activationEnabled=true;});
 		tween.start();	
 	}
-	
+	/*
 	var keyHandler = function(event){
-		
 		switch(event.keyCode){
 			//key 'a'
 			case 65:
@@ -103,17 +107,6 @@
 		}
 		
 	}
-	document.addEventListener("keydown", keyHandler, false);
-	
-	// loading 
-	function loadingProgress(item,loaded, total){
-		$('#loading_label').text((loaded/ total)*100);
-		// when is finish
-		
-		if(loaded==total){
-			$('#splash').fadeOut();
-		}
-	}
-
-
+	document.addEventListener("keydown", keyHandler, false);*/
+	setupSocket();
 	
