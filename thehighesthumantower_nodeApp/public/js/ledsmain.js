@@ -49,7 +49,8 @@
 				new LedScreen(160*2,0,162,640,40  ,scene,renderer,sceneBackground,rendererBackground,obj),
 				new LedScreen(160*3,0,162,640,50  ,scene,renderer,sceneBackground,rendererBackground,obj),
 				new LedScreen(160*4,0,162,640,60  ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*5,0,162,640,70  ,scene,renderer,sceneBackground,rendererBackground,obj)
+				new LedScreen(160*5,0,162,640,70  ,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*6,0,162,640,70  ,scene,renderer,sceneBackground,rendererBackground,obj)
 			]
 	
 	// animate
