@@ -44,13 +44,12 @@
 		});
 	
 	var ledscreens =[
-				new LedScreen(160*1,0,162,640,2.78 ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*0,0,162,640,10.0,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*0,0,162,640,2.78 ,scene,renderer,sceneBackground,rendererBackground,obj),
+				new LedScreen(160*1,0,162,640,10.0,scene,renderer,sceneBackground,rendererBackground,obj),
 				new LedScreen(160*2,0,162,640,40  ,scene,renderer,sceneBackground,rendererBackground,obj),
 				new LedScreen(160*3,0,162,640,50  ,scene,renderer,sceneBackground,rendererBackground,obj),
 				new LedScreen(160*4,0,162,640,60  ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*5,0,162,640,70  ,scene,renderer,sceneBackground,rendererBackground,obj),
-				new LedScreen(160*6,0,162,640,80  ,scene,renderer,sceneBackground,rendererBackground,obj)
+				new LedScreen(160*5,0,162,640,70  ,scene,renderer,sceneBackground,rendererBackground,obj)
 			]
 	
 	// animate
@@ -67,6 +66,9 @@
 		
 		
 		for(var i=0;i<ledscreens.length;i++){
+			var camera = ledscreens[i].camera;
+			camera.position.y=(i/(ledscreens.length-1))*(tower.position.y);
+			camera.updateProjectionMatrix();
 			ledscreens[i].animate();
 		}
 		
@@ -97,7 +99,6 @@
 		tween.onComplete(function(){activationEnabled=true;});
 		tween.start();	
 	}
-	/*
 	var keyHandler = function(event){
 		switch(event.keyCode){
 			//key 'a'
@@ -107,6 +108,6 @@
 		}
 		
 	}
-	document.addEventListener("keydown", keyHandler, false);*/
+	//document.addEventListener("keydown", keyHandler, false);
 	setupSocket();
 	
