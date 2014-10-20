@@ -292,15 +292,18 @@
 
 	// Event pan with for tablets (hammer.js)
 	var myElement = document.getElementById('threejs_tower');
-	var myOptions  = {'threshold':10};
+	var myOptions  = {'threshold':5};
 	var hammertime = new Hammer(myElement, myOptions);
-	hammertime.on('panup pandown', function(ev) {
-		console.log(ev);
+	hammertime.on('panup pandown panend pancancel', function(ev) {
+		console.log(ev.type);
 		if(ev.type=='panup'){
-			camAccel+=1;
+			camAccel=Math.max(camAccel-1,-10);
 		}else if(ev.type=='pandown'){
-			camAccel-=1;
+			camAccel=Math.min(camAccel+1, 10);;
+		}else if(ev.type=='panend'){
+			camAccel=0;
 		}
+		console.log(camAccel);
 	});
 
 	//form
