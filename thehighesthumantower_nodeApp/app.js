@@ -68,8 +68,8 @@ app.get('/tower-json', function(req, res) {
         // filter to objects need to display
         var list = [];
         for(var i =0;i<results.length;i++){
-            var obj = _.pick(results[i],'_id','heightPerson');
-            list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':i});
+            var obj = _.pick(results[i],'_id','heightPerson','totalFrames');
+            list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':i,'totalFrames':obj.totalFrames});
         }
         // return request as json 
         res.setHeader('Content-Type','application/json');
@@ -89,9 +89,9 @@ app.post('/insert-new', function(req, res) {
         //console.log(fields)
         // get fields data
         var heightPerson = parseInt(fields.heightPerson);
-        var heightPercentage = heightPercentage;
+        var totalFrames = fields.totalFrames;
         // save to database
-        db.insert({'heightPerson': heightPerson,'heightPercentage': heightPercentage }, function(err, body, header) {
+        db.insert({'heightPerson': heightPerson,'totalFrames': totalFrames }, function(err, body, header) {
             if (err) {
                 console.log('[db.insert] ', err.message);
                 return;
@@ -129,7 +129,7 @@ app.post('/insert-new', function(req, res) {
 		
                 // Give information that have new human after 5s
                 setTimeout(function(){
-			var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position};
+			var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
 			console.log(humanInfo);
                         io.sockets.emit('new-human',humanInfo);   
                     },5000);
