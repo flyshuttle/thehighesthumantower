@@ -9,7 +9,7 @@ Tower = function(){
 	this.activeBottomRadius   = 3;
 	
 	
-	this.maxActiveHumans = 50;
+	this.maxActiveHumans = 500;
 	this.height = 0;
 	this.spritesheets = [];
 	this.textureSize = 1024;
@@ -44,6 +44,7 @@ Tower = function(){
 		for(i=0;i<array.length;i++){
 			var id     = array[i]['_id']; 
 			var height = array[i]['heightPerson']/Human.realHeight/100;
+			height  =(height==0)?1:height;
 			var spriteSheet = this.spritesheets[Math.floor(i/128)];
 			var spriteIndex = i % 128;
 			var material = new SpriteSheetMaterial(spriteSheet,1,1,16,8,128,0,height);
