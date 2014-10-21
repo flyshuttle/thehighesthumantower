@@ -28,12 +28,12 @@
 	
 	container = document.getElementById( 'ledscreen_foreground' );
 	
-	
+	/*
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.top = '0px';
 	document.getElementById('ledscreen_foreground').appendChild( stats.domElement );
-	
+	*/
 	// background
 	var myBackground = new background();
 	
@@ -69,7 +69,7 @@
 	var animate = function () {
 		
 		TWEEN.update();
-		stats.update();
+		//stats.update();
 		//camera speed
 		var delta = clock.getDelta(); 
 		tower.update(delta);
