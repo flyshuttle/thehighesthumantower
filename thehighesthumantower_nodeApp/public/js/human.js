@@ -20,7 +20,7 @@ Human.meshWidth  = 60;
 Human.defaultGeometry = new THREE.PlaneGeometry(Human.meshWidth,Human.meshHeight, 1, 1);
 
 Human.textureSize = 1024;
-Human.realHeight = 1.8; //height in meters 
+Human.realHeight = 2.6; //height in meters 
 
 //get human height in 3d units
 Human.prototype.getHeight = function(){

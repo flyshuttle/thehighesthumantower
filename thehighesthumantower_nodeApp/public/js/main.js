@@ -6,7 +6,7 @@
 	var tower = new Tower();
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
-	var tiltAngle = 20;
+	var tiltAngle = 0;
 	var activationSpeed = 150; //when camSpeed < activationSpeed star activating humans
 	var activationEnabled = true; //camera moving to an id
 	
@@ -39,7 +39,10 @@
 	scene.add(obj);
 	
 	var towerJsonPath = "http://localhost:3000/tower-json";
-	if(document.URL.indexOf('localhost')== -1){
+	
+	if(document.URL.indexOf('www.thehighesthumantower.com')!= -1){
+		towerJsonPath = "http://www.thehighesthumantower.com/tower-json";
+	}else if(document.URL.indexOf('thehighesthumantower.com')!= -1){
 		towerJsonPath = "http://thehighesthumantower.com/tower-json";
 	}
 	

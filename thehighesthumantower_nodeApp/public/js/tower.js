@@ -19,7 +19,8 @@ Tower = function(){
 	var texture = new THREE.ImageUtils.loadTexture('img/aixeneta2048.jpg')
 	this.aixenetaMaterial = new SpriteSheetMaterial(texture,1,1,8,4,32,10,1);
 	var aixeneta = new THREE.Mesh(new THREE.PlaneGeometry(50,100, 1, 1), this.aixenetaMaterial); 
-	aixeneta.position.y=50;
+	aixeneta.position.y=30;
+	aixeneta.scale.multiplyScalar(0.65);
 	this.add(aixeneta);
 	
 	this.init = function(array){
@@ -76,8 +77,10 @@ Tower = function(){
 	
 	this.push = function(human){
 		this.humans.push(human);
-		human.position.y=-(this.height+human.getHeight()/2);
-		this.height += human.getHeight();
+		var overlap = 10;
+		human.position.y=-(this.height+human.getHeight()/2-overlap);
+		human.position.z=+this.height*0.001;
+		this.height += human.getHeight()-overlap;
 		this.add(human);
 	}
 	
@@ -85,6 +88,15 @@ Tower = function(){
 		console.log('deactivate All');
 		for(var i=0;i<this.activeHumans.length;i++){
 			this.activeHumans[i].activate(false);
+		}
+		this.activeHumans = []; 
+	}
+	
+	
+	this.activateAll = function(){
+		console.log('Activate All');
+		for(var i=0;i<this.humans.length;i++){
+			this.activate(i);
 		}
 		this.activeHumans = []; 
 	}

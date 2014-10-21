@@ -39,7 +39,9 @@
 	
 	var towerJsonPath = "http://localhost:3000/tower-json";
 	
-	if(document.URL.indexOf('localhost')== -1){
+	if(document.URL.indexOf('www.thehighesthumantower.com')!= -1){
+		towerJsonPath = "http://www.thehighesthumantower.com/tower-json";
+	}else if(document.URL.indexOf('thehighesthumantower.com')!= -1){
 		towerJsonPath = "http://thehighesthumantower.com/tower-json";
 	}
 
