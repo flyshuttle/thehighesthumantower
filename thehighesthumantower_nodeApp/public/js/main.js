@@ -4,6 +4,9 @@
 	var clock = new THREE.Clock();
 	
 	var tower = new Tower();
+	tower.visibleTopRadius     = 40;
+	tower.visibleBottomRadius  = 40;
+	
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
 	var tiltAngle = 0;

@@ -95,3 +95,7 @@ body {
 	width:35px;
 	height:35px;
 }
+
+/*hide debug tools*/
+#stats{display:none;}
+div.dg{display:none;}
