@@ -126,13 +126,12 @@ app.post('/insert-new', function(req, res) {
 				}
 			});
 		
-		
                 // Give information that have new human after 5s
                 setTimeout(function(){
-			var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
-			console.log(humanInfo);
-                        io.sockets.emit('new-human',humanInfo);   
-                    },5000);
+			         var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
+			         console.log(humanInfo);
+                    io.sockets.emit('new-human',humanInfo);   
+                },5000);
                 
             });
             
