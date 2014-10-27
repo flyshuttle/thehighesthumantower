@@ -13,7 +13,7 @@ var bodyParser = require('body-parser');
 var formidable = require('formidable');
 var util = require('util');
 var fs = require('fs');
-var path = require('path')
+var path = require('path');
 
 var convert = require('netpbm').convert;
 var _ = require("underscore");
@@ -100,8 +100,10 @@ app.post('/insert-new', function(req, res) {
             // Upload to internet
 
 		var position = results.length-1;
+        var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
+        console.log(humanInfo);
 		res.setHeader('Content-Type','application/json');
-		res.end(JSON.stringify(body));
+		res.end(JSON.stringify(humanInfo));
 		console.log(body);
 
 		var serverPath = __dirname +'/public/img/';
@@ -128,8 +130,6 @@ app.post('/insert-new', function(req, res) {
 		
                 // Give information that have new human after 5s
                 setTimeout(function(){
-			         var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
-			         console.log(humanInfo);
                     io.sockets.emit('new-human',humanInfo);   
                 },5000);
                 
@@ -182,6 +182,5 @@ server.listen(3000, function() {
 });
 
 module.exports = app;
-
 
 
