@@ -6,7 +6,7 @@ The Highest Human Tower is a new art project commissioned by Mobile World Capita
 You can see the online:
 http://thehighesthumantower.com/
 
-Project by: <a href="http://varvarag.info">Varvara Guljajeva</a> y <a href="http://mcanet.info">Mar Canet</a>(2014)
-Software assistance: Martín Nadal, Paul Ferragut, David Penuela
-Production assistance and 3D graphics assistance: Jesús Rodríguez
-Lighting design assistance: Jordi Baldo
+Project by: <a href="http://varvarag.info">Varvara Guljajeva</a> y <a href="http://mcanet.info">Mar Canet</a>(2014)<br>
+Software assistance: Martín Nadal, Paul Ferragut, David Penuela<br>
+Production assistance and 3D graphics assistance: Jesús Rodríguez<br>
+Lighting design assistance: Jordi Baldo<br>
