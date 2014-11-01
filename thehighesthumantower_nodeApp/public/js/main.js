@@ -1,4 +1,6 @@
+if(!Detector.webgl){
 //(function () {
+	console.log('it have webgl');
 	var scene = new THREE.Scene();
 	var sceneBackground = new THREE.Scene();
 	var clock = new THREE.Clock();
@@ -150,8 +152,6 @@
 	
 	//altimeter
 	var altimeter = $('#altimeter');
-	
-		
 	
 	// animate
 	var animate = function () {
@@ -342,6 +342,21 @@
 	}
 
 	setupSocket();
-	
-
+//})	
+}else{
+	console.log('it not have webgl');
+	// In case webGL is not possible in this computer
+	$('#video_piece').html('<iframe src="//player.vimeo.com/video/110560823" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
+	$('#video_piece').show();
+	$('#alertWebGL').show();
+	$('#title').css('top','10px');
+	$('#title').css('margin-top','0px');
+	// hide loading that is for webGL
+	$('#loading_label').hide();
+	$('.loading').hide();
+	setTimeout(function(){
+	   $('#alertWebGL').fadeOut();
+	},5000);
+	 
+}
 	

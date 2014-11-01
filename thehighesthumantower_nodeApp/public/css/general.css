@@ -11,7 +11,12 @@ body {
 /*  SPLASH -------------------  */
 #splash{
 	background:#dddddd;
-	z-index:99;
+	position: absolute; 
+	top: 0px; 
+	bottom: 0px; 
+	left: 0px; 
+	right: 0px; 
+	z-index: 10;
 }
 
 #title{
@@ -24,6 +29,26 @@ body {
     color:#000;
     text-align: center;
 }
+
+#video_piece{
+	display:none;
+	position:absolute;
+	top:100px;
+	left:%50;
+	width:100%;
+}
+
+#alertWebGL{
+    font-family: 'Signika', serif;
+    font-size: 16px;
+    position: absolute;
+    top: 70px;
+    width: 100%;
+    color:#0286f6;
+    text-align: center;
+    display: none;
+}
+
 #subtile{
     font-family: 'Signika', serif;
     font-size: 48px;
@@ -80,7 +105,6 @@ body {
 	font-size:24px;
 }
 
-
 #form_container{
 	position: absolute;
 	bottom: 50px; 
@@ -96,6 +120,9 @@ body {
 	height:35px;
 }
 
+
 /*hide debug tools*/
 #stats{display:none;}
 div.dg{display:none;}
+
+

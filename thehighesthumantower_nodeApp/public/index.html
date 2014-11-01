@@ -31,20 +31,13 @@
 <body>
 
 <!-- HTML from body -->
-<div id="splash" style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 10;">
+<div id="splash">
     <!--Put splash here-->
     <div id="title">The highest human tower</div>
+    <div id="alertWebGL">Unfortunately WebGL support is not enabled and the human tower can not be rendered.</div>
     <div class="loading"></div>
     <div id="loading_label"></div>
-</div>
-
-<!--  this progress bar is not used -->
-<div id="progress">
-	<span id="message">Loading ...</span>
-	<center>
-		<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
-		<div id="start" class="disabled">Start</div>
-	</center>
+    <div id="video_piece"></div>
 </div>
 
 <div id="threejs_background" style="position: absolute; left:0px; top:0px"></div>
@@ -58,12 +51,12 @@
       <input type="text" class="formfield-id-tower" id="findfield" placeholder="Enter id">
       <button  type="button" class="btn btn-default btn-id" id="findbtn">></button>
     </div>
-    
   </form>
 </div>
 
 <!-- Libraries JS -->
 <script type='text/javascript' src="js/libs/three.min.js"></script>
+<script type='text/javascript' src="js/libs/Detector.js"></script>
 <script type='text/javascript' src="js/libs/stats.min.js"></script>
 <script type='text/javascript' src="js/libs/OrbitControls.js"></script>
 <script type='text/javascript' src="js/libs/tween.min.js"></script>
