@@ -1,17 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>The highest human tower</title>
+	<title>The highest human tower - by Varvara Guljajeva and Mar Canet</title>
 	<meta charset="utf-8">
 	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<style>
-	body 
-	{
-		margin: 0px;
-		overflow: hidden;
-	}
-	</style>
+	<meta name="description" content="The highest human tower is an artwork by Varvara Guljajeva and Mar Canet(2014) comissioned by Mobile World Capital. First exhibited in Music+Arts exhibition at Mobile World Centre in Barcelona (21st Oct – 13th Dec 2014), curated by Alpha-Ville.">
+	<meta name="keywords" content="Varvara Guljajeva,Mar Canet,castellers,mobile world capital,mobile world conference, barcelona, mwc,art,kinect2,threejs,Alpha-Ville,artwork,castellers">
+	<meta name="author" content="Varvara Guljajeva and Mar Canet(2014)">
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Signika">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/general.css">
@@ -24,7 +20,6 @@
 
 	  ga('create', 'UA-55917341-1', 'auto');
 	  ga('send', 'pageview');
-
 	</script>
 
 </head>
@@ -34,10 +29,31 @@
 <div id="splash">
     <!--Put splash here-->
     <div id="title">The highest human tower</div>
+    <div id="subtitle">by <a href="http://var-mar.info">Varvara Guljajeva and Mar Canet</a></div>
+    <div id="closeInfoButton"><a href="#" onClick="javascript:closeInfoPage();"><img src="img/close.png" class="icon"></a></div>
     <div id="alertWebGL">Unfortunately WebGL support is not enabled and the human tower can not be rendered.</div>
     <div class="loading"></div>
     <div id="loading_label"></div>
-    <div id="video_piece"></div>
+    <div id="video_piece">
+    	<iframe id="videoVimeo" src="http://player.vimeo.com/video/110696504" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    </div>
+    <div id="info_piece">
+    	<div style="position:relative;width:500px;">
+		    The tradition of human tower or Castells in Catalan language comes from Catalonia. Each autumn the teams of Castellers are competing to build the highest tower in the region. The tradition goes back to 18th century and the record of the highest human tower is 9 levels. On November 16, 2010, castells were declared by UNESCO to be amongst the Masterpieces of the Oral and Intangible Heritage of Humanity (Wikipedia).<br>
+			We want to build the highest human tower in the world! The installation invites visitors to be a part of the tower. Hence, with each participant our tower grows.<br>
+			The interactive piece tries to relate to Castells tradition in very extraordinary way giving audience a super power to construct a tower of kilometers.<br><br>
+
+			How tall is the tower is possible to follow in real-time here:<br> <a href="http://www.thehighesthumantower.com">http://www.thehighesthumantower.com</a><br><br>
+
+			The artwork was commissioned by Mobile World Capital Barcelona.<br><br>
+
+			Software assistance: <a href="http://www.muimota.net/">Martin Nadal</a><br>
+			3D modelling and assistance: <a href="http://www.signpainter.es/">Jesus Rodriguez</a><br><br>
+
+			Exhibited:<br>
+			- <a href="https://www.mobileworldcentre.com/ca/music-arts">Music+Arts</a> exhibition at <a href="https://www.mobileworldcentre.com/">Mobile World Centre</a> in Barcelona (21st Oct – 13th Dec 2014), curated by <a href="http://www.alpha-ville.co.uk/">Alpha-Ville</a>.<br>
+		</div>
+	</div>
 </div>
 
 <div id="threejs_background" style="position: absolute; left:0px; top:0px"></div>
@@ -53,6 +69,7 @@
     </div>
   </form>
 </div>
+<div id="openInfoButton"><a href="#" onClick="javascript:showInfoPage();"><img src="img/info.png" class="icon"> About project</a></div>
 
 <!-- Libraries JS -->
 <script type='text/javascript' src="js/libs/three.min.js"></script>

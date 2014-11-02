@@ -1,4 +1,28 @@
-if(!Detector.webgl){
+function showInfoPage(){
+	$('#splash').show();
+	$('#video_piece').show();
+	$('#subtitle').show();
+	$('#info_piece').show();
+	$('#title').css('top','40px');
+	$('#title').css('margin-top','0px');
+	// hide loading that is for webGL
+	$('#loading_label').hide();
+	$('#closeInfoButton').hide();
+	$('.loading').hide();
+	// if webgl is available show button come back
+	if(Detector.webgl){
+		$('#closeInfoButton').show();
+	}
+	// change url to autostart video
+	$('#videoVimeo').attr('src', 'http://player.vimeo.com/video/110696504?autoplay=1');
+}
+
+function closeInfoPage(){
+	$('#splash').hide();
+	$('#videoVimeo').attr('src', 'http://player.vimeo.com/video/110696504');
+}
+
+if(Detector.webgl){
 //(function () {
 	console.log('it have webgl');
 	var scene = new THREE.Scene();
@@ -345,15 +369,9 @@ if(!Detector.webgl){
 //})	
 }else{
 	console.log('it not have webgl');
-	// In case webGL is not possible in this computer
-	$('#video_piece').html('<iframe src="//player.vimeo.com/video/110560823" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
-	$('#video_piece').show();
-	$('#alertWebGL').show();
-	$('#title').css('top','10px');
-	$('#title').css('margin-top','0px');
-	// hide loading that is for webGL
-	$('#loading_label').hide();
-	$('.loading').hide();
+	showInfoPage();
+	// Alert webGL that is not possible in this computer
+	$('#subtitle').show();
 	setTimeout(function(){
 	   $('#alertWebGL').fadeOut();
 	},5000);
