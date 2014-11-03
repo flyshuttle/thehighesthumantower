@@ -173,7 +173,6 @@ if(Detector.webgl){
 	$('#findfield').numeric();
 	$('#findform').submit(formHandler);
 	
-	
 	//altimeter
 	var altimeter = $('#altimeter');
 	
@@ -198,8 +197,6 @@ if(Detector.webgl){
 		//pinya update 
 		myBackground.pinyaFrontMaterial.update(delta);
 		myBackground.pinyaBackMaterial.update(delta);
-		
-		
 		
 		camSpeed+=camAccel;	
 		camSpeed*=0.99;
@@ -240,8 +237,6 @@ if(Detector.webgl){
 		
 		//prepare view
 		tower.prepareView(camera);
-		
-		
 		
 		renderer.render(scene, camera);
 		rendererBackground.render(sceneBackground, camera);

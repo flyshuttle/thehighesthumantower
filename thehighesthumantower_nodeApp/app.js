@@ -5,6 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Load config json file
+var nconf = require('nconf');
+nconf.file('./config.json');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -86,56 +90,59 @@ app.post('/insert-new', function(req, res) {
     
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {
-        //console.log(fields)
         // get fields data
         var heightPerson = parseInt(fields.heightPerson);
         var totalFrames = fields.totalFrames;
-        // save to database
-        db.insert({'heightPerson': heightPerson,'totalFrames': totalFrames }, function(err, body, header) {
-            if (err) {
-                console.log('[db.insert] ', err.message);
-                return;
-            }
-            myModel.findAll(function(error, results) {
-            // Upload to internet
+        var api_key = fields.api_key;
+        if(nconf.get('api_key') == api_key){
+            // save to database
+            db.insert({'heightPerson': heightPerson,'totalFrames': totalFrames }, function(err, body, header) {
+                if (err) {
+                    console.log('[db.insert] ', err.message);
+                    return;
+                }
+                myModel.findAll(function(error, results) {
+                    // Upload to internet
+            		var position = results.length-1;
+                    var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
+                    console.log(humanInfo);
+            		res.setHeader('Content-Type','application/json');
+            		res.end(JSON.stringify(humanInfo));
+            		console.log(body);
 
-		var position = results.length-1;
-        var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
-        console.log(humanInfo);
-		res.setHeader('Content-Type','application/json');
-		res.end(JSON.stringify(humanInfo));
-		console.log(body);
-
-		var serverPath = __dirname +'/public/img/';
-		console.log(serverPath);
-		// Create Folder
-                // Animation2048
-                var imgfilepath = serverPath+'temp/'+body.id+path.extname(files.animation2048.name);
-		
-                //move downloaded file with document's id
-                fs.writeFileSync(imgfilepath, fs.readFileSync(files.animation2048.path));
-                //run python script to resize and update the spritesheets
-		var exec = require('child_process').exec;
-		var child;
-
-		child = exec(__dirname +'/public/img/generateSpriteSheets.py '+imgfilepath+' '+position,
-			{cwd:__dirname +'/public/img/'},
-			function (error, stdout, stderr) {
-					console.log('stdout: ' + stdout);
-					console.log('stderr: ' + stderr);
-				if (error !== null) {
-					console.log('exec error: ' + error);
-				}
-			});
-		
-                // Give information that have new human after 5s
-                setTimeout(function(){
-                    io.sockets.emit('new-human',humanInfo);   
-                },5000);
+            		var serverPath = __dirname +'/public/img/';
+            		console.log(serverPath);
+            		// Create Folder
+                    // Animation2048
+                    var imgfilepath = serverPath+'temp/'+body.id+path.extname(files.animation2048.name);
+            		
+                    //move downloaded file with document's id
+                    fs.writeFileSync(imgfilepath, fs.readFileSync(files.animation2048.path));
+                    
+                    //run python script to resize and update the spritesheets
+            		var exec = require('child_process').exec;
+            		var child = exec(__dirname +'/public/img/generateSpriteSheets.py '+imgfilepath+' '+position,
+        			{cwd:__dirname +'/public/img/'},
+        			function (error, stdout, stderr) {
+        				console.log('stdout: ' + stdout);
+        				console.log('stderr: ' + stderr);
+        				if (error !== null) {
+        					console.log('exec error: ' + error);
+        				}
+        			});
+        		
+                    // Give information that have new human after 5s
+                    setTimeout(function(){
+                        io.sockets.emit('new-human',humanInfo);   
+                    },5000);
+                });
                 
             });
-            
-        });
+        }else{
+            console.log('Error not valid API KEY');
+            res.setHeader('Content-Type','application/json');
+            res.end(JSON.stringify({}));
+        }
     });
 });
 
