@@ -1,13 +1,13 @@
-var socket;
+var socketClient;
 
 function setupSocket(){
 
-  var socket = io();
+  socketClient = io();
 
   var reconnect = function() {
     socketConnectTimeInterval = setInterval(function () {
-      socket.socket.reconnect();
-      if(socket.socket.connected) {clearInterval(socketConnectTimeInterval);}
+      socketClient.socket.reconnect();
+      if(socketClient.socket.connected) {clearInterval(socketConnectTimeInterval);}
     }, 3000);
   };
 
@@ -16,19 +16,19 @@ function setupSocket(){
   var counterReceived = 0;
 
   //socket.set("reconnection limit", 5000);
-  socket.on('connect', function() {
+  socketClient.on('connect', function() {
     console.log("connected to socket");
     clearInterval(socketConnectTimeInterval);
   });
 
-  socket.on('disconnect to socket', function() {
+  socketClient.on('disconnect to socket', function() {
     socketConnectTimeInterval = setInterval(function () {
-      socket.socket.reconnect();
-      if(socket.socket.connected) {clearInterval(socketConnectTimeInterval);}
+      socketClient.socket.reconnect();
+      if(socketClient.socket.connected) {clearInterval(socketConnectTimeInterval);}
     }, 3000);
   });
   
-  socket.on('new-human',function(data){
+  socketClient.on('new-human',function(data){
     console.log('new-human', data);
     // Data 
     var id = data._id;
