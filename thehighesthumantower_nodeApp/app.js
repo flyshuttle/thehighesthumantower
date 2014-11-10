@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Load config json file
 var nconf = require('nconf');
-nconf.file('./config.json');
+nconf.file('./settings.json');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -161,7 +161,7 @@ app.post('/insert-new', function(req, res) {
                 
             });
         }else{
-            console.log('Error not valid API KEY:'+api_key);
+            console.log('Error not valid API KEY:'+api_key+" =="+nconf.get('api_key'));
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify({}));
         }
