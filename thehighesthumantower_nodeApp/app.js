@@ -161,7 +161,7 @@ app.post('/insert-new', function(req, res) {
                 
             });
         }else{
-            console.log('Error not valid API KEY');
+            console.log('Error not valid API KEY:'+api_key);
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify({}));
         }
