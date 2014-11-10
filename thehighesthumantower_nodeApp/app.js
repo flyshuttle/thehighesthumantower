@@ -71,9 +71,13 @@ app.get('/tower-json', function(req, res) {
     }else{
         // filter to objects need to display
         var list = [];
+        var count = 0;
         for(var i =0;i<results.length;i++){
             var obj = _.pick(results[i],'_id','heightPerson','totalFrames');
-            list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':i,'totalFrames':obj.totalFrames});
+            if(obj.heightPerson>100){
+                list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':count,'totalFrames':obj.totalFrames});   
+                count+=1; 
+            }
         }
         // return request as json 
         res.setHeader('Content-Type','application/json');
@@ -82,7 +86,25 @@ app.get('/tower-json', function(req, res) {
   });
 });
 
-
+app.get('/tower-json-all', function(req, res) {
+  myModel.findAll(function(error, results) {
+    if (error){
+        console.error('failed list documents');
+    }else{
+        // filter to objects need to display
+        /*
+        var list = [];
+        for(var i =0;i<results.length;i++){
+            var obj = _.pick(results[i],'_id','heightPerson','totalFrames');
+            list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':i,'totalFrames':obj.totalFrames});
+        }
+        */
+        // return request as json 
+        res.setHeader('Content-Type','application/json');
+        res.end(JSON.stringify(results));
+    }
+  });
+});
 
 /* Receive new interaction */
 app.post('/insert-new', function(req, res) {
@@ -94,9 +116,9 @@ app.post('/insert-new', function(req, res) {
         var heightPerson = parseInt(fields.heightPerson);
         var totalFrames = fields.totalFrames;
         var api_key = fields.api_key;
-        if(nconf.get('api_key') == api_key){
+        if(nconf.get('api_key') == api_key && heightPerson>100){
             // save to database
-            db.insert({'heightPerson': heightPerson,'totalFrames': totalFrames }, function(err, body, header) {
+            db.insert({'heightPerson': heightPerson,'totalFrames': totalFrames,'createdAt': Date.now() }, function(err, body, header) {
                 if (err) {
                     console.log('[db.insert] ', err.message);
                     return;
