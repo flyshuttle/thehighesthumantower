@@ -30,8 +30,8 @@ if(Detector.webgl){
 	var clock = new THREE.Clock();
 	
 	var tower = new Tower();
-	tower.visibleTopRadius     = 400;
-	tower.visibleBottomRadius  = 400;
+	tower.visibleTopRadius     = 6;
+	tower.visibleBottomRadius  = 3;
 	
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
@@ -67,7 +67,7 @@ if(Detector.webgl){
 	obj.scale.multiplyScalar(0.01);
 	scene.add(obj);
 	
-	var towerJsonPath = "http://localhost:3000/tower-json";
+	var towerJsonPath = "http://localhost:3000/tower.NEW.json";
 	
 	if(document.URL.indexOf('www.thehighesthumantower.com')!= -1){
 		towerJsonPath = "http://www.thehighesthumantower.com/tower-json";

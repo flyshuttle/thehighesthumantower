@@ -5,11 +5,10 @@ Tower = function(){
 	this.visibleIndex  = {}; //index of the [camera]->visibleIndex
 	this.visibleTopRadius     = 10;
 	this.visibleBottomRadius  = 10;
-	this.activeTopRadius      = 3;
-	this.activeBottomRadius   = 3;
+	this.activeTopRadius      = 20;
+	this.activeBottomRadius   = 20;
 	
-	
-	this.maxActiveHumans = 500;
+	this.maxActiveHumans = 120;
 	this.height = 0;
 	this.spritesheets = [];
 	this.textureSize = 1024;
@@ -108,9 +107,6 @@ Tower = function(){
 		if(index!=-1 && this.activeHumans.indexOf(human)==-1){
 			human.activate(true);
 			this.activeHumans.push(human);
-			console.log("active:"+index);
-			console.log("COUNT:"+this.activeHumans.length);
-			
 		}
 		
 		//in case there are too many active
@@ -118,19 +114,18 @@ Tower = function(){
 			this.activeHumans[0].activate(false);
 			this.activeHumans.splice(0,1);	
 		}
-	
-		
 	}
+
 	//get the nearest human to certain height
 	this.getIndexAtHeight = function(height){
+				
 		var i=this.humans.length-1;
 		var auxHeight = 0;
 		while(i>0 && auxHeight<height){
-			auxHeight+=this.humans[i].getHeight();
+			auxHeight=this.humans[i].position.y+this.position.y;
 			i--;
 		}
 		return i;
-		
 	}
 	
 	//get height at certain index
@@ -157,10 +152,9 @@ Tower = function(){
 	}
 	
 	this.addCamera = function(camera){
-		this.visibleIndex[camera]=0;
+		this.visibleIndex[camera.id]=-1000000;
 		
 	}
-	
 	
 	//show the humans that can bee seen at certain height and hides the rest
 	this.prepareView = function(camera){
@@ -182,41 +176,47 @@ Tower = function(){
 		var topActiveIndex    = this.humans.length-this.activeTopRadius-1;
 		
 		
-		var visibleIndex = this.visibleIndex[camera];
+		var visibleIndex = this.visibleIndex[camera.id];
 		//nothing has changed
 		if(index == visibleIndex || index==-1){
 			return;
-		}
-		
-		if(index < visibleIndex){
-			//shift the visible humans down
-			for(;visibleIndex>index;visibleIndex--){
-				if(visibleIndex>=bottomVisibleIndex){
-					this.add(this.humans[visibleIndex-this.visibleBottomRadius]);
+		}else if(visibleIndex<0){
+			for(i=Math.max(0,index-this.visibleBottomRadius);i<Math.min(this.humans.length,index + this.visibleTopRadius);i++){
+				this.add(this.humans[i]);
+			}
+			for(i=Math.max(0,index-this.activeBottomRadius);i<Math.min(this.humans.length-1,index + this.activeTopRadius);i++){
+				this.activate(i);
+			}
+			
+			visibleIndex=index;
+		}else	if(index < visibleIndex){
+				//shift the visible humans down
+				for(;visibleIndex>index;visibleIndex--){
+					if(visibleIndex>=bottomVisibleIndex){
+						this.add(this.humans[visibleIndex-this.visibleBottomRadius]);
+					}
+					if(visibleIndex<=topVisibleIndex){
+						this.remove(this.humans[visibleIndex+this.visibleTopRadius]);
+					}
+					if(visibleIndex>=bottomActiveIndex){
+						this.activate(visibleIndex-this.activeBottomRadius);
+					}
 				}
-				if(visibleIndex<=topVisibleIndex){
-					this.remove(this.humans[visibleIndex+this.visibleTopRadius]);
-				}
-				if(visibleIndex>=bottomActiveIndex){
-					this.activate(visibleIndex-this.activeBottomRadius);
+			}else{
+				//shift the visible humans up
+				for(;visibleIndex<index;visibleIndex++){
+					if(visibleIndex>=bottomVisibleIndex){
+						this.remove(this.humans[visibleIndex-this.visibleBottomRadius]);
+					}
+					if(visibleIndex<=topVisibleIndex){
+						this.add(this.humans[visibleIndex+this.visibleTopRadius]);
+					}
+					if(visibleIndex<=topActiveIndex){
+						this.activate(visibleIndex+this.activeTopRadius);
+					}
 				}
 			}
-		}else{
-			//shift the visible humans up
-			for(;visibleIndex<index;visibleIndex++){
-				if(visibleIndex>=bottomVisibleIndex){
-					this.remove(this.humans[visibleIndex-this.visibleBottomRadius]);
-				}
-				if(visibleIndex<=topVisibleIndex){
-					this.add(this.humans[visibleIndex+this.visibleTopRadius]);
-				}
-				if(visibleIndex<=topActiveIndex){
-					this.activate(visibleIndex+this.activeTopRadius);
-				}
-			}
-		}
-		
-		this.visibleIndex[camera] = visibleIndex; 
+		this.visibleIndex[camera.id] = visibleIndex; 
 	}
 	//remove all humans
 	this.removeAll = function(){
