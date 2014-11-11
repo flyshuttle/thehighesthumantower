@@ -28,6 +28,8 @@ function LedScreen(left, bottom, width, height,scene,renderer,sceneBackground,re
 	obj.add(this.camera);
 	this.animate = function() {
 		
+		tower.activate(tower.getIndexAtHeight(this.camera.position.y));
+		
 		//background
 		this.rendererBackground.setViewport(this.left, this.bottom, this.width, this.height );
 		this.rendererBackground.setScissor (this.left, this.bottom, this.width,this. height );
