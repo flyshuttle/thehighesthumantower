@@ -67,7 +67,7 @@ if(Detector.webgl){
 	obj.scale.multiplyScalar(0.01);
 	scene.add(obj);
 	
-	var towerJsonPath = "http://localhost:3000/tower.NEW.json";
+	var towerJsonPath = "http://localhost:3000/tower-json";
 	
 	if(document.URL.indexOf('www.thehighesthumantower.com')!= -1){
 		towerJsonPath = "http://www.thehighesthumantower.com/tower-json";
