@@ -2,11 +2,10 @@
 	var clock = new THREE.Clock();
 	
 	var tower = new Tower();
-	tower.visibleTopRadius     = 1;
-	tower.visibleBottomRadius  = 1;
-	tower.activeTopRadius      = 10;
-	tower.activeBottomRadius   = 10;
-	
+	tower.visibleTopRadius     = 200;
+	tower.visibleBottomRadius  = 200;
+	tower.activeTopRadius      = 3;
+	tower.activeBottomRadius   = 3;
 	
 	var scene = new THREE.Scene();
 	var sceneBackground = new THREE.Scene();

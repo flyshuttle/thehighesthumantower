@@ -37,11 +37,9 @@ Human.prototype.update = function(delta){
 Human.prototype.onLoad = function(image){
 	
 	console.log("loaded");
-	if(this.animated==true){
-		var texture = new THREE.Texture(image);
-		this.material = new SpriteSheetMaterial(texture,(102*10)/1024,(204*5)/1024,10,5,50,6,this.height);
-		this.material.texture.needsUpdate = true;
-	}
+	var texture = new THREE.Texture(image);
+	this.material = new SpriteSheetMaterial(texture,(102*10)/1024,(204*5)/1024,10,5,50,6,this.height);
+	this.material.texture.needsUpdate = true;
 	this.loader = null; //free the loader 
 }
 
@@ -54,21 +52,15 @@ Human.prototype.activate = function(active){
 	this.animated = active
 	
 	if(active==true){
-		//console.log("activated:"+this.ident);
+		console.log("activated:"+this.ident);
 		this.loader = new THREE.ImageLoader();
 		this.loader.load('img/animations/'+Human.textureSize+'/'+this.ident+'.jpg',this.onLoad.bind(this));
 	}else{
-		
-		if(this.loader==null){
-			console.log("deactiated"+this.ident);
-			var texture = this.material.texture;
-			this.material = this.inactiveMaterial;
-			
-			this.material.texture.needsUpdate = true;
-			
-			texture.dispose();
-		}
-		
+		console.log("deactiated"+this.ident);
+		var texture = this.material.texture;
+		this.material = this.inactiveMaterial;
+		this.material.texture.needsUpdate = true;
+		texture.dispose();
 	}
 	
 }

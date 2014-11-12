@@ -30,8 +30,8 @@ if(Detector.webgl){
 	var clock = new THREE.Clock();
 	
 	var tower = new Tower();
-	tower.visibleTopRadius     = 6;
-	tower.visibleBottomRadius  = 3;
+	tower.visibleTopRadius     = 400;
+	tower.visibleBottomRadius  = 400;
 	
 	var maxAccel  = 20; //max speed allowed
 	var tiltSpeed = 500;
