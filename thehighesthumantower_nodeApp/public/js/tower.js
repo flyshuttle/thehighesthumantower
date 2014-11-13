@@ -8,8 +8,8 @@ Tower = function(){
 	this.activeTopRadius      = 3;
 	this.activeBottomRadius   = 3;
 	
-	
-	this.maxActiveHumans = 500;
+
+	this.maxActiveHumans = 4000;
 	this.height = 0;
 	this.spritesheets = [];
 	this.textureSize = 1024;
