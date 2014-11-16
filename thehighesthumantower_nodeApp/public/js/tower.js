@@ -79,7 +79,7 @@ Tower = function(){
 		this.humans.push(human);
 		var overlap = 10;
 		human.position.y=-(this.height+human.getHeight()/2-overlap);
-		human.position.z=+this.height*0.001;
+		human.position.z=+this.height*0.00001;
 		this.height += human.getHeight()-overlap;
 		this.add(human);
 	}
