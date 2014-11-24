@@ -116,7 +116,7 @@ app.post('/insert-new', function(req, res) {
         var heightPerson = parseInt(fields.heightPerson);
         var totalFrames = fields.totalFrames;
         var api_key = fields.api_key;
-        if(nconf.get('api_key') == api_key && heightPerson>100){
+        if(nconf.get('api_key') == api_key && heightPerson>100 && files.animation2048.size>0 ){
             // save to database
             db.insert({'heightPerson': heightPerson,'totalFrames': totalFrames,'createdAt': Date.now() }, function(err, body, header) {
                 if (err) {
