@@ -5,11 +5,10 @@ Tower = function(){
 	this.visibleIndex  = {}; //index of the [camera]->visibleIndex
 	this.visibleTopRadius     = 10;
 	this.visibleBottomRadius  = 10;
-	this.activeTopRadius      = 3;
-	this.activeBottomRadius   = 3;
-	
+	this.activeTopRadius      = 10;
+	this.activeBottomRadius   = 10;
+	this.maxActiveHumans = 120;
 
-	this.maxActiveHumans = 4000;
 	this.height = 0;
 	this.spritesheets = [];
 	this.textureSize = 1024;
@@ -53,6 +52,8 @@ Tower = function(){
 			var human  = new Human(id,height,material);
 			this.push(human);
 		}
+		this.removeAll();
+		
 	}
 	
 	this.initTexture = function(textureSize){
@@ -87,7 +88,7 @@ Tower = function(){
 	this.deactivateAll = function(){
 		console.log('deactivate All');
 		for(var i=0;i<this.activeHumans.length;i++){
-			this.activeHumans[i].activate(false);
+			this.activeHumans[i].activateHuman(false);
 		}
 		this.activeHumans = []; 
 	}
@@ -96,21 +97,19 @@ Tower = function(){
 	this.activateAll = function(){
 		console.log('Activate All');
 		for(var i=0;i<this.humans.length;i++){
-			this.activate(i);
+			this.activateHuman(i);
 		}
 		this.activeHumans = []; 
 	}
 	
-	this.activate = function(index){
+	this.activateHuman = function(index){
 	
 		var human = this.humans[index];
-		
-		if(index!=-1 && this.activeHumans.indexOf(human)==-1){
+		//check if it is already activated
+		if(this.activeHumans.indexOf(human)==-1){
+			console.log(index);
 			human.activate(true);
 			this.activeHumans.push(human);
-			console.log("active:"+index);
-			console.log("COUNT:"+this.activeHumans.length);
-			
 		}
 		
 		//in case there are too many active
@@ -118,19 +117,27 @@ Tower = function(){
 			this.activeHumans[0].activate(false);
 			this.activeHumans.splice(0,1);	
 		}
-	
-		
 	}
+	
+	//activate humans in the radius of a certain index
+	this.activate = function(index){
+		//active humans are between this two indexes
+		var bottomActiveIndex  = Math.max(0,index-this.activeBottomRadius);
+		var topActiveIndex     = Math.min(this.humans.length,index+this.activeTopRadius);
+		
+		for(var i=bottomActiveIndex;i<topActiveIndex;i++){
+			this.activateHuman(i);
+		}	
+	}
+	
 	//get the nearest human to certain height
 	this.getIndexAtHeight = function(height){
+		//TODO:more optimized search 		
 		var i=this.humans.length-1;
-		var auxHeight = 0;
-		while(i>0 && auxHeight<height){
-			auxHeight+=this.humans[i].getHeight();
+		while(i>0 && this.humans[i].position.y+this.position.y<height){
 			i--;
 		}
 		return i;
-		
 	}
 	
 	//get height at certain index
@@ -157,10 +164,9 @@ Tower = function(){
 	}
 	
 	this.addCamera = function(camera){
-		this.visibleIndex[camera]=0;
+		this.visibleIndex[camera.id]=-1000000;
 		
 	}
-	
 	
 	//show the humans that can bee seen at certain height and hides the rest
 	this.prepareView = function(camera){
@@ -173,51 +179,63 @@ Tower = function(){
 		var index  = this.getIndexAtHeight(camera.position.y);
 		var i;
 		
-		//visible humans are between this two indexes
-		var bottomVisibleIndex = this.visibleBottomRadius;
-		var topVisibleIndex    = this.humans.length-this.visibleTopRadius-1;
-		
-		//active humans are between this two indexes
-		var bottomActiveIndex  = this.activeBottomRadius;
-		var topActiveIndex    = this.humans.length-this.activeTopRadius-1;
-		
-		
-		var visibleIndex = this.visibleIndex[camera];
+		var visibleIndex = this.visibleIndex[camera.id];
 		//nothing has changed
 		if(index == visibleIndex || index==-1){
 			return;
-		}
-		
-		if(index < visibleIndex){
-			//shift the visible humans down
-			for(;visibleIndex>index;visibleIndex--){
-				if(visibleIndex>=bottomVisibleIndex){
-					this.add(this.humans[visibleIndex-this.visibleBottomRadius]);
-				}
-				if(visibleIndex<=topVisibleIndex){
-					this.remove(this.humans[visibleIndex+this.visibleTopRadius]);
-				}
-				if(visibleIndex>=bottomActiveIndex){
-					this.activate(visibleIndex-this.activeBottomRadius);
-				}
-			}
 		}else{
-			//shift the visible humans up
-			for(;visibleIndex<index;visibleIndex++){
-				if(visibleIndex>=bottomVisibleIndex){
-					this.remove(this.humans[visibleIndex-this.visibleBottomRadius]);
+			//visible humans are between this two indexes
+		
+			var bottomVisibleIndex = Math.max(0,index-this.visibleBottomRadius);
+			var topVisibleIndex    = Math.min(this.humans.length,index + this.visibleTopRadius);
+			//if visible <0 it hasn't been initialiazed
+			if(visibleIndex<0){
+				
+				for(i=bottomVisibleIndex;i<topVisibleIndex;i++){
+					this.add(this.humans[i]);
 				}
-				if(visibleIndex<=topVisibleIndex){
-					this.add(this.humans[visibleIndex+this.visibleTopRadius]);
+				visibleIndex=index;
+			}else	if(index < visibleIndex){
+					//shift the visible humans down
+					for(;visibleIndex-this.visibleBottomRadius>=bottomVisibleIndex;visibleIndex--){
+						this.add(this.humans[visibleIndex-this.visibleBottomRadius]);
+						//check if human is shown in another camera
+						if(this.cameraDisplay(visibleIndex)<=1){
+							this.remove(this.humans[visibleIndex+this.visibleTopRadius]);
+							console.log("removed"+visibleIndex);
+						}
+					}
+				}else{
+					//shift the visible humans up
+					for(;visibleIndex+this.visibleTopRadius<topVisibleIndex;visibleIndex++){
+						this.add(this.humans[visibleIndex+this.visibleTopRadius]);
+						if(this.cameraDisplay(visibleIndex)<=1){
+							this.remove(this.humans[visibleIndex-this.visibleBottomRadius]);
+							console.log("removed"+visibleIndex);
+						}
+					}
 				}
-				if(visibleIndex<=topActiveIndex){
-					this.activate(visibleIndex+this.activeTopRadius);
-				}
+			this.visibleIndex[camera.id] = visibleIndex; 
+		}
+	}
+	//returns the number of cameras that displays the human
+	this.cameraDisplay = function(index){
+		var cameraCounter = 0;
+		var topVisibleIndex,bottomVisibleIndex;
+		for(cameraid in this.visibleIndex){
+			//visible humans are between this two indexes
+			bottomVisibleIndex = Math.max(0,index-this.visibleBottomRadius);
+			topVisibleIndex    = Math.min(this.humans.length,index + this.visibleTopRadius);
+		
+			if(index>bottomVisibleIndex && index<topVisibleIndex){
+				cameraCounter++;
 			}
 		}
 		
-		this.visibleIndex[camera] = visibleIndex; 
+		return cameraCounter;
+		
 	}
+	
 	//remove all humans
 	this.removeAll = function(){
 		for(var i  in this.humans){
