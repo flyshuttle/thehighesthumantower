@@ -125,7 +125,14 @@ app.post('/insert-new', function(req, res) {
                 }
                 myModel.findAll(function(error, results) {
                     // Upload to internet
-            		var position = results.length-1;
+                    var position = 0;
+                    for(var i=0;i<results.length;i++){
+			    if(results[i]['heightPerson']>100){
+				    position++;
+			    }
+		    }
+		    position = position - 1 ; //point the last element
+		    console.log(position);
                     var humanInfo = {'_id':body.id,'heightPerson':heightPerson,'position':position,'totalFrames':totalFrames};
                     console.log(humanInfo);
             		res.setHeader('Content-Type','application/json');
