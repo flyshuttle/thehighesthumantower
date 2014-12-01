@@ -63,13 +63,35 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
 //app.use('/', routes);
 app.use('/users', users);
 
+/*sort results*/
+function sortResults(results){
+	//sort list by createAt
+        // split list in two lists, one with elements with createdAt field and another with the ones that don't have it 
+	var datedList   = [];
+	var undatedList = [];
+        for(var i =0;i<results.length;i++){
+		if('createdAt' in results[i]){
+			datedList.push(results[i]);
+		}else{
+			undatedList.push(results[i]);
+		}
+	}
+	//sort the dated list by it createdAt field
+	datedList = _.sortBy(datedList,function(obj){return obj['createdAt'];});
+	//concatenate both lists
+	return undatedList.concat(datedList);	
+}
+
 /* Export json */
+
 app.get('/tower-json', function(req, res) {
   myModel.findAll(function(error, results) {
     if (error){
         console.error('failed list documents');
     }else{
-        // filter to objects need to display
+        // sort 
+	results  = sortResults(results);
+	// filter to objects need to display
         var list = [];
         var count = 0;
         for(var i =0;i<results.length;i++){
@@ -90,22 +112,15 @@ app.get('/tower-json-all', function(req, res) {
   myModel.findAll(function(error, results) {
     if (error){
         console.error('failed list documents');
-    }else{
-        // filter to objects need to display
-        /*
-        var list = [];
-        for(var i =0;i<results.length;i++){
-            var obj = _.pick(results[i],'_id','heightPerson','totalFrames');
-            list.push({'heightPerson':obj.heightPerson,'_id':obj._id,'position':i,'totalFrames':obj.totalFrames});
-        }
-        */
+    }else{  
+	var list = sortResults(results);
         // return request as json 
         res.setHeader('Content-Type','application/json');
-        res.end(JSON.stringify(results));
+        res.end(JSON.stringify(list));
     }
   });
 });
-
+   
 /* Receive new interaction */
 app.post('/insert-new', function(req, res) {
     // specify the database we are going to use
